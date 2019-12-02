@@ -1,0 +1,569 @@
+swagger: "2.0"
+info:
+  description: "Blackjack"
+  version: "0.1.0"
+  title: "Newrow 0.1.0"
+  termsOfService: "https://ninthfloor.org"
+  contact:
+    name: "Aaron S. Hawley"
+    email: "aaron.s.hawley@gmail.com"
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+host: "blackjack.dev"
+basePath: "/v0"
+tags:
+- name: "card"
+  description: "Card"
+- name: "hand"
+  description: "Hand"
+- name: "player"
+  description: "Player"
+- name: "table"
+  description: "Table"
+schemes:
+- "https"
+paths:
+  /tables:
+    post:
+      tags:
+      - "table"
+      summary: "Add a new table"
+      description: "Creates a table"
+      operationId: "addTable"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Table that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/Table"
+      responses:
+        201:
+          description: "Table created"
+          schema:
+            $ref: "#/definitions/Table"
+        405:
+          description: "Invalid input"
+        406:
+          description: "Invalid content type"
+    get:
+      tags:
+      - "table"
+      summary: "List tables"
+      description: "Returns list of table numbers"
+      operationId: "findTables"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "tableId"
+        in: "path"
+        description: "Table number"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Tables"
+        400:
+          description: "Invalid input"
+        404:
+          description: "Table not found"
+        406:
+          description: "Invalid content type"
+  /tables/{tableId}:
+    put:
+      tags:
+      - "table"
+      summary: "Update an existing table"
+      description: "Modify a table"
+      operationId: "updateTable"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "tableId"
+        in: "path"
+        description: "Table number"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        description: "Table that needs to be updated"
+        required: true
+        schema:
+          $ref: "#/definitions/Table"
+      responses:
+        200:
+          description: "Table updated"
+          schema:
+            $ref: "#/definitions/Table"
+        400:
+          description: "Invalid input"
+        404:
+          description: "Table not found"
+        405:
+          description: "Invalid input"
+    get:
+      tags:
+      - "table"
+      summary: "Find table by number"
+      description: "Returns a single table"
+      operationId: "getTableById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "tableId"
+        in: "path"
+        description: "Table number"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Table"
+        400:
+          description: "Invalid input"
+        404:
+          description: "Table not found"
+        406:
+          description: "Invalid content type"
+    delete:
+      tags:
+      - "table"
+      summary: "Delete a table by number"
+      description: "Remove a table"
+      operationId: "deleteTable"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "tableId"
+        in: "path"
+        description: "Table number"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "Table deleted"
+        400:
+          description: "Invalid input"
+        404:
+          description: "Table not found"
+  /tables/{tableId}/players:
+    post:
+      tags:
+      - "player"
+      summary: "Add a player to table"
+      description: "Creates a player"
+      operationId: "addPlayer"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "tableId"
+        in: "path"
+        description: "Table number"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        description: "Player object that needs to be updated"
+        required: true
+        schema:
+          $ref: "#/definitions/Table"
+      responses:
+        201:
+          description: "Player created"
+          schema:
+            $ref: "#/definitions/Player"
+        405:
+          description: "Invalid input"
+        406:
+          description: "Invalid content type"
+    get:
+      tags:
+      - "player"
+      summary: "Get players at table"
+      description: "Returns list of players"
+      operationId: "findPlayersByTable"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "tableId"
+        in: "path"
+        description: "Table number"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Players"
+        400:
+          description: "Invalid input"
+  /tables/{tableId}/players/{playerId}:
+    put:
+      tags:
+      - "player"
+      summary: "Update a player at the table"
+      description: "Modify a table"
+      operationId: "updatePlayer"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "tableId"
+        in: "path"
+        description: "Table number"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "playerId"
+        in: "path"
+        description: "Player number"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        description: "Player that needs to be updated"
+        required: true
+        schema:
+          $ref: "#/definitions/Player"
+      responses:
+        200:
+          description: "Player updated"
+          schema:
+            $ref: "#/definitions/Player"
+        400:
+          description: "Invalid input"
+        404:
+          description: "Player not found"
+        405:
+          description: "Invalid input"
+    get:
+      tags:
+      - "player"
+      summary: "Find player by number"
+      description: "Get player by number at table"
+      operationId: "getPlayerBySeat"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "tableId"
+        in: "path"
+        description: "Table number"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "playerId"
+        in: "path"
+        description: "Player number"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Player"
+        400:
+          description: "Invalid input"
+        404:
+          description: "Player not found"
+    delete:
+      tags:
+      - "player"
+      summary: "Delete player"
+      description: "Remove player from table"
+      operationId: "deletePlayer"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "tableId"
+        in: "path"
+        description: "Table number"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "playerId"
+        in: "path"
+        description: "Player number"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        400:
+          description: "Invalid input"
+        404:
+          description: "Player not found"
+definitions:
+  Suits:
+    type: "string"
+    enum: &SUITS
+    - "spade"
+    - "heart"
+    - "diamond"
+    - "club"
+  Faces:
+    type: "string"
+    enum: &FACES
+    - "A"
+    - "K"
+    - "Q"
+    - "J"
+    - "10"
+    - "9"
+    - "8"
+    - "7"
+    - "6"
+    - "5"
+    - "4"
+    - "3"
+    - "2"
+  Card:
+    type: "object"
+    required:
+    - "suit"
+    - "face"
+    properties:
+      suit:
+        type: "string"
+        enum: *SUITS
+        description: "Card suit"
+      face:
+        type: "string"
+        enum: *FACES
+        description: "Card face"
+  Actions:
+    type: "string"
+    enum: &ACTIONS
+    - "hit"
+    - "stand"
+    - "double"
+    - "split"
+    - "surrender"
+  Hands:
+    type: "object"
+    required:
+    - "bet"
+    - "hands"
+    properties:
+      bet:
+        type: "integer"
+        format: "int64"
+        description: "Initial player bet"
+      hands:
+        type: "array"
+        items:
+          type: "object"
+          $ref: "#/definitions/Hand"
+          description: "Hand"
+        description: "Hands of player"
+  Hand:
+    type: "object"
+    required:
+    - "cards"
+    - "actions"
+    - "initial"
+    - "bet"
+    - "total"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        description: "Hand number"
+      prev:
+        type: "integer"
+        format: "int64"
+        description: "Hand split from"
+      cards:
+        type: "array"
+        items:
+          $ref: "#/definitions/Card"
+        description: "Cards in player hand"
+      actions:
+        type: "array"
+        items:
+          type: "string"
+          enum: *ACTIONS
+        description: "Action of player hand"
+      initial:
+        type: "integer"
+        format: "int64"
+        description: "Initial hand bet"
+      bet:
+        type: "integer"
+        format: "int64"
+        description: "Current hand bet"
+      total:
+        type: "integer"
+        format: "int64"
+        description: "Player hand total"
+  Players:
+    type: "object"
+    properties:
+      tableId:
+        type: "integer"
+        format: "int64"
+        description: "Table number"
+      count:
+        type: "integer"
+        format: "int64"
+        description: "Number of players"
+      players:
+        type: "array"
+        items:
+          type: "integer"
+          format: "int64"
+        description: "Player numbers"
+  Player:
+    type: "object"
+    required:
+    - "chips"
+    - "hand"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        description: "Player number"
+      chips:
+        type: "integer"
+        format: "int64"
+        description: "Player chip total"
+      hand:
+        description: "Hand(s)"
+        $ref: "#/definitions/Hands"
+  Tables:
+    type: "object"
+    properties:
+      count:
+        type: "integer"
+        format: "int64"
+        description: "Number of tables"
+      tables:
+        type: "array"
+        items:
+          type: "integer"
+          format: "int64"
+        description: "Table numbers"
+  Table:
+    type: "object"
+    required:
+    - "decks"
+    - "minimum"
+    - "maximum"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        description: "Table number"
+      decks:
+        type: "integer"
+        format: "int64"
+        description: "Number of decks"
+      seats:
+        type: "integer"
+        format: "int64"
+        description: "Number of seats at the table (default: 7)"
+      players:
+        type: "integer"
+        format: "int64"
+        description: "Number of players at the table (default: 0)"
+      minimum:
+        type: "integer"
+        format: "int64"
+        description: "Minimum bet"
+      maximum:
+        type: "integer"
+        format: "int64"
+        description: "Maximum bet"
+      rules:
+        $ref: "#/definitions/Rules"
+      rounds:
+        type: "integer"
+        format: "int64"
+        description: "Number of rounds played"
+  Shoe:
+    type: "object"
+    properties:
+      decks:
+        type: "integer"
+        format: "int64"
+        description: "Number of decks"
+      rounds:
+        type: "integer"
+        format: "int64"
+        description: "Number of rounds played since last shuffle"
+      discard:
+        type: "integer"
+        format: "int64"
+        description: "Number of cards in discard pile"
+      cut:
+        type: "integer"
+        format: "int64"
+        description: "Number of cards ahead of cut card"
+  Status:
+    type: "string"
+    enum: &STATUS
+    - "dead"
+    - "shuffle"
+    - "bet"
+    - "deal"
+    - "player"
+    - "dealer"
+    - "settle"
+    - "end"
+  Pays:
+    type: "string"
+    enum: &PAYS
+    - "3 to 2"
+    - "6 to 5"
+  Rules:
+    type: "object"
+    properties:
+      blackjackPays:
+        type: "string"
+        enum: *PAYS
+        description: "Payout for Blackjack (defaults: 3 to 2)"
+      dealerStands:
+        type: "object"
+        properties:
+          total:
+            type: "integer"
+            format: "int64"
+            description: "Total dealer stands on (default: 17)"
+          soft:
+            type: "boolean"
+            description: "Can dealer hit on soft totals? (default: false)"
+  Error:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+      file:
+        type: "string"
+      line:
+        type: "integer"
+        format: "int64"
+      column:
+        type: "integer"
+        format: "int64"
+externalDocs:
+  description: "Blackjack"
+  url: "https://ninthfloor.org"

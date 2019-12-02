@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.ninthfloor</groupId>
+    <artifactId>bj21-parent</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>bj21-gson</artifactId>
+
+  <packaging>jar</packaging>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.8.6</version>
+    </dependency>
+
+    <dependency>
+      <groupId>io.swagger</groupId>
+      <artifactId>swagger-annotations</artifactId>
+      <version>1.5.24</version>
+    </dependency>
+
+    <!-- <dependency> -->
+    <!--   <groupId>com.squareup.okhttp3</groupId> -->
+    <!--   <artifactId>okhttp</artifactId> -->
+    <!--   <version>3.14.4</version> -->
+    <!-- </dependency> -->
+
+    <!-- <dependency> -->
+    <!--   <groupId>com.squareup.okhttp3</groupId> -->
+    <!--   <artifactId>logging-interceptor</artifactId> -->
+    <!--   <version>3.14.4</version> -->
+    <!-- </dependency> -->
+
+    <!-- <dependency> -->
+    <!--   <groupId>io.gsonfire</groupId> -->
+    <!--   <artifactId>gson-fire</artifactId> -->
+    <!--   <version>1.8.3</version> -->
+    <!-- </dependency> -->
+
+    <dependency>
+      <groupId>com.google.code.findbugs</groupId>
+      <artifactId>jsr305</artifactId>
+      <version>3.0.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+
+    <plugins>
+
+      <plugin>
+        <groupId>org.openapitools</groupId>
+        <artifactId>openapi-generator-maven-plugin</artifactId>
+        <version>4.2.2-SNAPSHOT</version>
+
+        <dependencies>
+      
+          <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>bj21-swagger</artifactId>
+            <version>${project.version}</version>
+          </dependency>
+        
+        </dependencies>
+      
+        <executions>
+
+          <execution>
+            <id>swagger-gson</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <inputSpec>swagger.yml</inputSpec>
+              <output>${project.basedir}</output>
+              <language>java</language>
+              <library>okhttp-gson</library>
+              <invokerPackage>org.ninthfloor.bj21.api</invokerPackage>
+              <apiPackage>org.ninthfloor.bj21.api.okhttp</apiPackage>
+              <modelPackage>org.ninthfloor.bj21.api.gson</modelPackage>
+              <generateApis>false</generateApis>
+              <generateApiDocumentation>false</generateApiDocumentation>
+              <generateModelDocumentation>false</generateModelDocumentation>
+              <generateModels>true</generateModels>
+              <generateSupportingFiles>false</generateSupportingFiles>
+              <groupId>${project.groupId}</groupId>
+              <artifactId>bj21-gson</artifactId>
+              <artifactVersion>${project.version}</artifactVersion>
+              <!-- <supportingFilesToGenerate> -->
+              <!--   pom.xml,ApiCallback.java,ApiException.java,ApiResponse.java,GzipRequestInterceptor.java,JSON.java,Pair.java,ProgressRequestBody.java,ProgressResponseBody.java,Authentication.java,HttpBasicAuth.java,ApiKeyAuth.java,OAuth.java,StringUtil.java -->
+              <!-- </supportingFilesToGenerate> -->
+              <configOptions>
+                <java8>true</java8>
+                <dateLibrary>java8</dateLibrary>
+              </configOptions>
+            </configuration>
+          </execution>
+
+        </executions>
+
+      </plugin>
+
+    </plugins>
+
+  </build>
+
+</project>
