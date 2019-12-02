@@ -97,11 +97,12 @@
             <configuration>
               <inputSpec>swagger.yml</inputSpec>
               <output>${project.basedir}</output>
-              <language>java</language>
+              <skipOverwrite>false</skipOverwrite>
+              <generatorName>java</generatorName>
               <library>okhttp-gson</library>
-              <invokerPackage>org.ninthfloor.bj21.api</invokerPackage>
-              <apiPackage>org.ninthfloor.bj21.api.okhttp</apiPackage>
-              <modelPackage>org.ninthfloor.bj21.api.gson</modelPackage>
+              <invokerPackage>org.ninthfloor.bj21</invokerPackage>
+              <apiPackage>org.ninthfloor.bj21.okhttp</apiPackage>
+              <modelPackage>org.ninthfloor.bj21.gson</modelPackage>
               <generateApis>false</generateApis>
               <generateApiDocumentation>false</generateApiDocumentation>
               <generateModelDocumentation>false</generateModelDocumentation>

@@ -17,6 +17,8 @@ tags:
   description: "Card"
 - name: "hand"
   description: "Hand"
+- name: "dealer"
+  description: "Dealer"
 - name: "player"
   description: "Player"
 - name: "table"
@@ -180,7 +182,7 @@ paths:
         format: "int64"
       - in: "body"
         name: "body"
-        description: "Player object that needs to be updated"
+        description: "Player that needs to be added"
         required: true
         schema:
           $ref: "#/definitions/Table"
@@ -220,7 +222,7 @@ paths:
       tags:
       - "player"
       summary: "Update a player at the table"
-      description: "Modify a table"
+      description: "Modify a player"
       operationId: "updatePlayer"
       consumes:
       - "application/json"
@@ -312,6 +314,115 @@ paths:
           description: "Invalid input"
         404:
           description: "Player not found"
+  /tables/{tableId}/dealer:
+    post:
+      tags:
+      - "dealer"
+      summary: "Add a dealer to table"
+      description: "Creates a dealer"
+      operationId: "addDealer"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "tableId"
+        in: "path"
+        description: "Table number"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        description: "Dealer that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/Dealer"
+      responses:
+        201:
+          description: "Dealer created"
+          schema:
+            $ref: "#/definitions/Dealer"
+        405:
+          description: "Invalid input"
+        406:
+          description: "Invalid content type"
+    get:
+      tags:
+      - "dealer"
+      summary: "Get dealer at table"
+      description: "Returns list of dealer"
+      operationId: "findDealerByTable"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "tableId"
+        in: "path"
+        description: "Table number"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Dealer"
+        400:
+          description: "Invalid input"
+    put:
+      tags:
+      - "dealer"
+      summary: "Update a dealer at the table"
+      description: "Modify a dealer"
+      operationId: "updateDealer"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "tableId"
+        in: "path"
+        description: "Table number"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        description: "Dealer that needs to be updated"
+        required: true
+        schema:
+          $ref: "#/definitions/Dealer"
+      responses:
+        200:
+          description: "Dealer updated"
+          schema:
+            $ref: "#/definitions/Dealer"
+        400:
+          description: "Invalid input"
+        404:
+          description: "Dealer not found"
+        405:
+          description: "Invalid input"
+    delete:
+      tags:
+      - "dealer"
+      summary: "Delete dealer"
+      description: "Remove dealer from table"
+      operationId: "deleteDealer"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "tableId"
+        in: "path"
+        description: "Table number"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        400:
+          description: "Invalid input"
+        404:
+          description: "Dealer not found"
 definitions:
   Suits:
     type: "string"
@@ -432,6 +543,19 @@ definitions:
           type: "integer"
           format: "int64"
         description: "Player numbers"
+  Dealer:
+    type: "object"
+    required:
+    - "chips"
+    - "hand"
+    properties:
+      chips:
+        type: "integer"
+        format: "int64"
+        description: "Table hold"
+      hand:
+        description: "Hand"
+        $ref: "#/definitions/Hand"
   Player:
     type: "object"
     required:
