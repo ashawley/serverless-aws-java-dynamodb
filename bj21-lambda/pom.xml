@@ -23,11 +23,11 @@
 
   <dependencies>
 
-    <!-- <dependency> -->
-    <!--   <groupId>org.ninthfloor</groupId> -->
-    <!--   <artifactId>bj21-gson</artifactId> -->
-    <!--   <version>${project.version}</version> -->
-    <!-- </dependency> -->
+    <dependency>
+      <groupId>org.ninthfloor</groupId>
+      <artifactId>bj21-gson</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
     <dependency>
       <groupId>com.amazonaws</groupId>
@@ -41,10 +41,10 @@
       <artifactId>aws-lambda-java-events</artifactId>
       <version>2.2.7</version>
       <exclusions>
-	<exclusion>
-	  <groupId>com.amazonaws</groupId>
-	  <artifactId>aws-lambda-java-core</artifactId>
-	</exclusion>
+        <exclusion>
+          <groupId>com.amazonaws</groupId>
+          <artifactId>aws-lambda-java-core</artifactId>
+        </exclusion>
       </exclusions>
 
     </dependency>
@@ -61,6 +61,7 @@
       <version>1.7.28</version>
     </dependency>
 
+    <!-- Use slf4j-simple instead to show log in console. -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-nop</artifactId>
@@ -87,6 +88,15 @@
   <build>
 
     <plugins>
+
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <classpathDependencyExcludes>
+            <classpathDependencyExclude>org.slf4j:slf4j-log4j12</classpathDependencyExclude>
+          </classpathDependencyExcludes>
+        </configuration>
+      </plugin>
 
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
