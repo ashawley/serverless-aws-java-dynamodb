@@ -255,7 +255,7 @@ paths:
         400:
           description: "Invalid input"
         404:
-          description: "Player not found"
+          description: "Table not found"
         405:
           description: "Invalid input"
     get:
@@ -287,7 +287,7 @@ paths:
         400:
           description: "Invalid input"
         404:
-          description: "Player not found"
+          description: "Table not found"
     delete:
       tags:
       - "player"
@@ -313,7 +313,7 @@ paths:
         400:
           description: "Invalid input"
         404:
-          description: "Player not found"
+          description: "Table not found"
   /tables/{tableId}/dealer:
     post:
       tags:
@@ -351,7 +351,7 @@ paths:
       tags:
       - "dealer"
       summary: "Get dealer at table"
-      description: "Returns list of dealer"
+      description: "Returns dealer"
       operationId: "findDealerByTable"
       produces:
       - "application/json"
@@ -400,7 +400,7 @@ paths:
         400:
           description: "Invalid input"
         404:
-          description: "Dealer not found"
+          description: "Table not found"
         405:
           description: "Invalid input"
     delete:
@@ -422,7 +422,116 @@ paths:
         400:
           description: "Invalid input"
         404:
-          description: "Dealer not found"
+          description: "Table not found"
+  /tables/{tableId}/rules:
+    post:
+      tags:
+      - "rules"
+      summary: "Add rules to table"
+      description: "Creates rules"
+      operationId: "addRules"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "tableId"
+        in: "path"
+        description: "Table number"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        description: "Rules that need to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/Rules"
+      responses:
+        201:
+          description: "Rules created"
+          schema:
+            $ref: "#/definitions/Rules"
+        405:
+          description: "Invalid input"
+        406:
+          description: "Invalid content type"
+    get:
+      tags:
+      - "rules"
+      summary: "Get rules of table"
+      description: "Returns rules"
+      operationId: "findRulesByTable"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "tableId"
+        in: "path"
+        description: "Table number"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Rules"
+        400:
+          description: "Invalid input"
+    put:
+      tags:
+      - "rules"
+      summary: "Update rules at the table"
+      description: "Modify the rules"
+      operationId: "updateRules"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "tableId"
+        in: "path"
+        description: "Table number"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        description: "Rules that need to be updated"
+        required: true
+        schema:
+          $ref: "#/definitions/Rules"
+      responses:
+        200:
+          description: "Rules updated"
+          schema:
+            $ref: "#/definitions/Rules"
+        400:
+          description: "Invalid input"
+        404:
+          description: "Table not found"
+        405:
+          description: "Invalid input"
+    delete:
+      tags:
+      - "rules"
+      summary: "Delete rules"
+      description: "Remove rules from table"
+      operationId: "deleteRules"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "tableId"
+        in: "path"
+        description: "Table number"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        400:
+          description: "Invalid input"
+        404:
+          description: "Table not found"
 definitions:
   Suits:
     type: "string"
@@ -617,8 +726,6 @@ definitions:
         type: "integer"
         format: "int64"
         description: "Maximum bet"
-      rules:
-        $ref: "#/definitions/Rules"
       rounds:
         type: "integer"
         format: "int64"

@@ -23,12 +23,11 @@ import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
-import org.ninthfloor.bj21.gson.Rules;
 
 /**
  * Table
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-12-03T09:06:06.451-05:00[America/New_York]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-12-03T12:21:26.249-05:00[America/New_York]")
 public class Table {
   public static final String SERIALIZED_NAME_ID = "id";
   @SerializedName(SERIALIZED_NAME_ID)
@@ -53,10 +52,6 @@ public class Table {
   public static final String SERIALIZED_NAME_MAXIMUM = "maximum";
   @SerializedName(SERIALIZED_NAME_MAXIMUM)
   private Long maximum;
-
-  public static final String SERIALIZED_NAME_RULES = "rules";
-  @SerializedName(SERIALIZED_NAME_RULES)
-  private Rules rules;
 
   public static final String SERIALIZED_NAME_ROUNDS = "rounds";
   @SerializedName(SERIALIZED_NAME_ROUNDS)
@@ -198,29 +193,6 @@ public class Table {
   }
 
 
-  public Table rules(Rules rules) {
-    
-    this.rules = rules;
-    return this;
-  }
-
-   /**
-   * Get rules
-   * @return rules
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
-  public Rules getRules() {
-    return rules;
-  }
-
-
-  public void setRules(Rules rules) {
-    this.rules = rules;
-  }
-
-
   public Table rounds(Long rounds) {
     
     this.rounds = rounds;
@@ -259,13 +231,12 @@ public class Table {
         Objects.equals(this.players, table.players) &&
         Objects.equals(this.minimum, table.minimum) &&
         Objects.equals(this.maximum, table.maximum) &&
-        Objects.equals(this.rules, table.rules) &&
         Objects.equals(this.rounds, table.rounds);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, decks, seats, players, minimum, maximum, rules, rounds);
+    return Objects.hash(id, decks, seats, players, minimum, maximum, rounds);
   }
 
 
@@ -279,7 +250,6 @@ public class Table {
     sb.append("    players: ").append(toIndentedString(players)).append("\n");
     sb.append("    minimum: ").append(toIndentedString(minimum)).append("\n");
     sb.append("    maximum: ").append(toIndentedString(maximum)).append("\n");
-    sb.append("    rules: ").append(toIndentedString(rules)).append("\n");
     sb.append("    rounds: ").append(toIndentedString(rounds)).append("\n");
     sb.append("}");
     return sb.toString();

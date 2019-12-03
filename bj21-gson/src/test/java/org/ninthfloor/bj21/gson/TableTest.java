@@ -21,7 +21,6 @@ import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
-import org.ninthfloor.bj21.gson.Rules;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -87,14 +86,6 @@ public class TableTest {
     @Test
     public void maximumTest() {
         // TODO: test maximum
-    }
-
-    /**
-     * Test the property 'rules'
-     */
-    @Test
-    public void rulesTest() {
-        // TODO: test rules
     }
 
     /**

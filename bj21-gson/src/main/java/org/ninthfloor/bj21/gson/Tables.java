@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * Tables
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-12-03T09:06:06.451-05:00[America/New_York]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-12-03T12:21:26.249-05:00[America/New_York]")
 public class Tables {
   public static final String SERIALIZED_NAME_COUNT = "count";
   @SerializedName(SERIALIZED_NAME_COUNT)
