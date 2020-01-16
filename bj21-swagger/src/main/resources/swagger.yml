@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: "Blackjack"
   version: "0.1.0"
-  title: "Newrow 0.1.0"
+  title: "Blackjack"
   termsOfService: "https://ninthfloor.org"
   contact:
     name: "Aaron S. Hawley"
