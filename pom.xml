@@ -16,6 +16,7 @@
   <modules>
     <module>bj21-swagger</module>
     <module>bj21-gson</module>
+    <module>bj21-dynamodb</module>
     <module>bj21-lambda</module>
   </modules>
 

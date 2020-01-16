@@ -11,7 +11,7 @@
     <version>0.1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>bj21-lambda</artifactId>
+  <artifactId>bj21-dynamodb</artifactId>
 
   <packaging>jar</packaging>
 
@@ -19,6 +19,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+    <!-- <sqlite4java.library.path>native-libs</sqlite4java.library.path> -->
   </properties>
 
   <repositories>
@@ -37,37 +38,11 @@
       <version>${project.version}</version>
     </dependency>
 
-    <dependency>
-      <groupId>org.ninthfloor</groupId>
-      <artifactId>bj21-dynamodb</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
     <!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-dynamodb -->
     <dependency>
       <groupId>com.amazonaws</groupId>
       <artifactId>aws-java-sdk-dynamodb</artifactId>
       <version>1.11.705</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.amazonaws</groupId>
-      <artifactId>aws-lambda-java-core</artifactId>
-      <version>1.2.0</version>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>com.amazonaws</groupId>
-      <artifactId>aws-lambda-java-events</artifactId>
-      <version>2.2.7</version>
-      <exclusions>
-        <exclusion>
-          <groupId>com.amazonaws</groupId>
-          <artifactId>aws-lambda-java-core</artifactId>
-        </exclusion>
-      </exclusions>
-
     </dependency>
 
     <!-- https://s3-us-west-2.amazonaws.com/dynamodb-local/release/com/amazonaws/DynamoDBLocal/maven-metadata.xml -->
@@ -189,6 +164,20 @@
       </plugin>
 
       <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.6.0</version>
+        <configuration>
+          <systemProperties>
+            <systemProperty>
+              <key>sqlite4java.library.path</key>
+              <value>${project.build.directory}/lib</value>
+            </systemProperty>
+          </systemProperties>
+        </configuration>
+      </plugin>
+
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
         <executions>
@@ -207,27 +196,48 @@
         </executions>
       </plugin>
 
-      <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>3.2.1-SNAPSHOT</version>
-        <configuration>
-          <descriptors>
-            <descriptor>src/main/resources/assembly/assembly.xml</descriptor>
-          </descriptors>
-        </configuration>
-        <executions>
-          <execution>
-            <id>assembly</id>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
+      <!-- <plugin> -->
+      <!--   <groupId>org.apache.maven.plugins</groupId> -->
+      <!--   <artifactId>maven-dependency-plugin</artifactId> -->
+      <!--   <executions> -->
+      <!--     <execution> -->
+      <!--       <id>copy</id> -->
+      <!--       <phase>compile</phase> -->
+      <!--       <goals> -->
+      <!--         <goal>copy</goal> -->
+      <!--       </goals> -->
+      <!--       <configuration> -->
+      <!--         <artifactItems> -->
+      <!--           <artifactItem> -->
+      <!--             <groupId>com.almworks.sqlite4java</groupId> -->
+      <!--             <artifactId>libsqlite4java-osx-x86_64</artifactId> -->
+      <!--             <version>${sqlite4java.version}</version> -->
+      <!--             <type>so</type> -->
+      <!--             <overWrite>true</overWrite> -->
+      <!--             <outputDirectory>${project.build.directory}/lib</outputDirectory> -->
+      <!--           </artifactItem> -->
+      <!--         </artifactItems> -->
+      <!--       </configuration> -->
+      <!--     </execution> -->
+      <!--   </executions> -->
+      <!-- </plugin> -->
+      <!-- <plugin> -->
+      <!--   <groupId>org.codehaus.mojo</groupId> -->
+      <!--   <artifactId>appassembler-maven-plugin</artifactId> -->
+      <!--   <version>1.0-alpha-2</version> -->
+      <!--   <executions> -->
+      <!--     <execution> -->
+      <!--       <id>assemble</id> -->
+      <!--       <phase>package</phase> -->
+      <!--       <goals> -->
+      <!--         <goal>assemble</goal> -->
+      <!--       </goals> -->
+      <!--       <configuration> -->
+      <!--         <extraJvmArguments>-Dsqlite4java.library.path=lib</extraJvmArguments> -->
+      <!--       </configuration> -->
+      <!--     </execution> -->
+      <!--   </executions> -->
+      <!-- </plugin> -->
     </plugins>
-
   </build>
-
 </project>
