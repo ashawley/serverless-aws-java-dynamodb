@@ -36,9 +36,9 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class AddTableTest
+public class GetTableByIdTest
 {
-    private AddTable addTable;
+    private GetTableById getTableById;
 
     private Table table;
 
@@ -57,7 +57,7 @@ public class AddTableTest
     public void init()
     {
         ddb = DynamoDBEmbedded.create().amazonDynamoDB();
-        addTable = new AddTable(ddb);
+        getTableById = new GetTableById(ddb);
         table = new Table();
         request = new APIGatewayProxyRequestEvent();
         gson = gsonBuilder.create();
@@ -77,25 +77,27 @@ public class AddTableTest
 
         String tableName = "Tables";
         // The environment variable is probably empty, so override it.
-        addTable.TABLES_TABLE_NAME = tableName;
+        getTableById.TABLES_TABLE_NAME = tableName;
         CreateTableResult res =
             createTable(ddb, tableName, attrs, ks, throughput);
     }
 
+    // TODO
     @Test
     public void testHandleRequestFailure()
     {
         APIGatewayProxyResponseEvent response =
-            addTable.handleRequest(request, context);
+            getTableById.handleRequest(request, context);
         // assertEquals(response, actual);
         assertEquals("application/json",
                      response.getHeaders().get("Content-Type"));
         assertNull(response.getHeaders().get("Location"));
-        assertEquals(Integer.valueOf(405), response.getStatusCode());
-        assertEquals("{\"message\":\"Invalid input\",\"file\":\"HTTP-body\"}",
+        assertEquals(Integer.valueOf(501), response.getStatusCode());
+        assertEquals("{\"message\":\"Not implemented\",\"file\":\"null null\"}",
                      response.getBody());
     }
 
+    // TODO
     @Test
     public void testHandleRequestSuccess1()
     {
@@ -103,29 +105,21 @@ public class AddTableTest
         Map<String,String> queryStringParameters = new HashMap<>();
         headers.put("Accept",
                     "application/json");
-        request.setHttpMethod("POST");
-        request.setResource("/v0/tables");
-        request.setPath("");
+        request.setHttpMethod("GET");
+        request.setResource("");
+        request.setPath("/v0/tables/0");
         request.setQueryStringParameters(queryStringParameters);
         request.setHeaders(headers);
-        table.setId(0L);
-        table.setDecks(0L);
-        table.setSeats(0L);
-        table.setPlayers(0L);
-        table.setMinimum(0L);
-        table.setMaximum(0L);
-        table.setRounds(0L);
-        request.setBody(gson.toJson(table));
         APIGatewayProxyResponseEvent response =
-            addTable.handleRequest(request, context);
+            getTableById.handleRequest(request, context);
         assertEquals("application/json",
                      response.getHeaders().get("Content-Type"));
-        assertEquals("https://blackjack.dev/v0/tables/0",
-                     response.getHeaders().get("Location"));
-        assertEquals(Integer.valueOf(201), response.getStatusCode());
-        assertEquals(gson.toJson(table), response.getBody());
+        assertEquals(Integer.valueOf(501), response.getStatusCode());
+        assertEquals("{\"message\":\"Not implemented\",\"file\":\"GET /v0/tables/0\"}",
+                     response.getBody());
     }
 
+    // TODO
     @Test
     public void testHandleRequestSuccess2()
     {
@@ -138,15 +132,14 @@ public class AddTableTest
         request.setPath("");
         request.setQueryStringParameters(queryStringParameters);
         request.setHeaders(headers);
-        request.setBody("");
         APIGatewayProxyResponseEvent response =
-            addTable.handleRequest(request, context);
+            getTableById.handleRequest(request, context);
         // assertEquals(response, actual);
         assertEquals("application/json",
                      response.getHeaders().get("Content-Type"));
-        assertEquals(Integer.valueOf(405), response.getStatusCode());
+        assertEquals(Integer.valueOf(501), response.getStatusCode());
         assertNull(response.getHeaders().get("Location"));
-        assertEquals("{\"message\":\"Invalid input\",\"file\":\"HTTP-body\"}",
+        assertEquals("{\"message\":\"Not implemented\",\"file\":\" \"}",
                      response.getBody());
     }
 

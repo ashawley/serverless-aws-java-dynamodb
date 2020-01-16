@@ -34,6 +34,15 @@ functions:
       - http:
           path: /v0/tables
           method: post
+  getTableById:
+    handler: org.ninthfloor.bj21.lambda.v0.GetTableById
+    events:
+      - http:
+          path: /v0/tables/{id}
+          method: get
+	  parameters:
+	    paths:
+	      id: true
 
 resources:
   Resources:
