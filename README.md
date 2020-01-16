@@ -47,4 +47,4 @@ a string by Serverless local.
 
 You can run an integration test of a AWS Lambda function:
 
-    $ env TABLES_TABLE_NAME=Tables  mvn test -pl :bj21-lambda -am -Dmaven.source.skip -DfailIfNoTests=false -Dtest=org.ninthfloor.bj21.lambda.v0.AddTableTest
+    $ mvn test -pl :bj21-lambda -am -Dmaven.source.skip -DfailIfNoTests=false -Dtest=org.ninthfloor.bj21.lambda.v0.AddTableTest

@@ -76,7 +76,9 @@ public class AddTableTest
         ProvisionedThroughput throughput =
             new ProvisionedThroughput(1000L, 1000L);
 
-        String tableName = addTable.TABLES_TABLE_NAME;
+        String tableName = "Tables";
+        // The environment variable is probably empty, so override it.
+        addTable.TABLES_TABLE_NAME = tableName;
         CreateTableResult res =
             createTable(ddb, tableName, attrs, ks, throughput);
     }
