@@ -1,5 +1,5 @@
 /*
- * Newrow 0.1.0
+ * Blackjack
  * Blackjack
  *
  * The version of the OpenAPI document: 0.1.0
@@ -30,7 +30,7 @@ import org.ninthfloor.bj21.gson.Card;
 /**
  * Hand
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-12-03T12:21:26.249-05:00[America/New_York]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-01-17T14:08:06.540-05:00[America/New_York]")
 public class Hand {
   public static final String SERIALIZED_NAME_ID = "id";
   @SerializedName(SERIALIZED_NAME_ID)
