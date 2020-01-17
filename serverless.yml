@@ -134,6 +134,79 @@ functions:
             statusCodes:
               501:
                 pattern: ''
+  addRules:
+    # handler: org.ninthfloor.bj21.lambda.v0.AddRules
+    handler: org.ninthfloor.bj21.lambda.v0.Dummy
+    events:
+      - http:
+          path: /v0/tables/{tableId}/rules
+          method: post
+          integration: mock
+          request:
+            template:
+              application/json: '{"statusCode": 501}'
+          response:
+            template: $input.path('$')
+            statusCodes:
+              201:
+                pattern: ''
+  findRulesByTable:
+    # handler: org.ninthfloor.bj21.lambda.v0.FindRulesByTable
+    handler: org.ninthfloor.bj21.lambda.v0.Dummy
+    events:
+      - http:
+          path: /v0/tables/{tableId}/rules
+          method: get
+          parameters:
+            paths:
+              tableId: true
+          integration: mock
+          request:
+            template:
+              application/json: '{"statusCode": 501"}'
+          response:
+            template: $input.path('$')
+            statusCodes:
+              501:
+                pattern: ''
+  updateRules:
+    # handler: org.ninthfloor.bj21.lambda.v0.UpdateRules
+    handler: org.ninthfloor.bj21.lambda.v0.Dummy
+    events:
+      - http:
+          path: /v0/tables/{tableId}/rules
+          method: put
+          parameters:
+            paths:
+              tableId: true
+          integration: mock
+          request:
+            template:
+              application/json: '{"statusCode": 501"}'
+          response:
+            template: $input.path('$')
+            statusCodes:
+              501:
+                pattern: ''
+  deleteRules:
+    # handler: org.ninthfloor.bj21.lambda.v0.DeleteRules
+    handler: org.ninthfloor.bj21.lambda.v0.Dummy
+    events:
+      - http:
+          path: /v0/tables/{tableId}/rules
+          method: delete
+          parameters:
+            paths:
+              tableId: true
+          integration: mock
+          request:
+            template:
+              application/json: '{"statusCode": 501}'
+          response:
+            template: $input.path('$')
+            statusCodes:
+              501:
+                pattern: ''
 
 resources:
   Resources:
