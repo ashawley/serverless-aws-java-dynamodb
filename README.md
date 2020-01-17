@@ -3,6 +3,10 @@ Blackjack API
 
 An implementation of Blackjack using Java and Serverless.
 
+1. About 1,500 sloc of Java.
+1. About 1,000 sloc of YAML.
+1. About 500 sloc of Maven POM.
+
 Generate sources:
 
     $ mvn generate-sources

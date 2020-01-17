@@ -38,29 +38,102 @@ functions:
     handler: org.ninthfloor.bj21.lambda.v0.GetTableById
     events:
       - http:
-          path: /v0/tables/{id}
+          path: /v0/tables/{tableId}
           method: get
           parameters:
             paths:
-              id: true
+              tableId: true
   updateTable:
     handler: org.ninthfloor.bj21.lambda.v0.UpdateTable
     events:
       - http:
-          path: /v0/tables/{id}
+          path: /v0/tables/{tableId}
           method: put
           parameters:
             paths:
-              id: true
+              tableId: true
   deleteTable:
     handler: org.ninthfloor.bj21.lambda.v0.DeleteTable
     events:
       - http:
-          path: /v0/tables/{id}
+          path: /v0/tables/{tableId}
           method: delete
           parameters:
             paths:
-              id: true
+              tableId: true
+  addDealer:
+    # handler: org.ninthfloor.bj21.lambda.v0.AddDealer
+    handler: org.ninthfloor.bj21.lambda.v0.Dummy
+    events:
+      - http:
+          path: /v0/tables/{tableId}/dealer
+          method: post
+          integration: mock
+          request:
+            template:
+              application/json: '{"statusCode": 501}'
+          response:
+            template: $input.path('$')
+            statusCodes:
+              201:
+                pattern: ''
+  findDealerByTable:
+    # handler: org.ninthfloor.bj21.lambda.v0.FindDealerByTable
+    handler: org.ninthfloor.bj21.lambda.v0.Dummy
+    events:
+      - http:
+          path: /v0/tables/{tableId}/dealer
+          method: get
+          parameters:
+            paths:
+              tableId: true
+          integration: mock
+          request:
+            template:
+              application/json: '{"statusCode": 501"}'
+          response:
+            template: $input.path('$')
+            statusCodes:
+              501:
+                pattern: ''
+  updateDealer:
+    # handler: org.ninthfloor.bj21.lambda.v0.UpdateDealer
+    handler: org.ninthfloor.bj21.lambda.v0.Dummy
+    events:
+      - http:
+          path: /v0/tables/{tableId}/dealer
+          method: put
+          parameters:
+            paths:
+              tableId: true
+          integration: mock
+          request:
+            template:
+              application/json: '{"statusCode": 501"}'
+          response:
+            template: $input.path('$')
+            statusCodes:
+              501:
+                pattern: ''
+  deleteDealer:
+    # handler: org.ninthfloor.bj21.lambda.v0.DeleteDealer
+    handler: org.ninthfloor.bj21.lambda.v0.Dummy
+    events:
+      - http:
+          path: /v0/tables/{tableId}/dealer
+          method: delete
+          parameters:
+            paths:
+              tableId: true
+          integration: mock
+          request:
+            template:
+              application/json: '{"statusCode": 501}'
+          response:
+            template: $input.path('$')
+            statusCodes:
+              501:
+                pattern: ''
 
 resources:
   Resources:
