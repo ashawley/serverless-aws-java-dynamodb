@@ -105,7 +105,7 @@ public class DeleteTableTest
         Map<String,String> queryStringParameters = new HashMap<>();
         headers.put("Accept",
                     "application/json");
-        request.setHttpMethod("PUT");
+        request.setHttpMethod("DELETE");
         request.setResource("");
         request.setPath("/v0/tables/0");
         request.setQueryStringParameters(queryStringParameters);
@@ -115,7 +115,7 @@ public class DeleteTableTest
         assertEquals("application/json",
                      response.getHeaders().get("Content-Type"));
         assertEquals(Integer.valueOf(501), response.getStatusCode());
-        assertEquals("{\"message\":\"Not implemented\",\"file\":\"PUT /v0/tables/0\"}",
+        assertEquals("{\"message\":\"Not implemented\",\"file\":\"DELETE /v0/tables/0\"}",
                      response.getBody());
     }
 
