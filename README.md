@@ -1,7 +1,7 @@
 Blackjack API
 =============
 
-An implementation of Blackjack using Java and Serverless.
+An implementation of Blackjack using Java and Serverless Framework.
 
 1. About 1,500 sloc of Java.
 1. About 1,000 sloc of YAML.
