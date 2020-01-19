@@ -51,6 +51,8 @@ paths:
             $ref: "#/definitions/Table"
         405:
           description: "Invalid input"
+          schema:
+            $ref: "#/definitions/Error"
         406:
           description: "Invalid content type"
     get:
@@ -75,8 +77,6 @@ paths:
             $ref: "#/definitions/Tables"
         400:
           description: "Invalid input"
-        404:
-          description: "Table not found"
         406:
           description: "Invalid content type"
   /tables/{tableId}:
@@ -185,12 +185,14 @@ paths:
         description: "Player that needs to be added"
         required: true
         schema:
-          $ref: "#/definitions/Table"
+          $ref: "#/definitions/Player"
       responses:
         201:
           description: "Player created"
           schema:
             $ref: "#/definitions/Player"
+        404:
+          description: "Table not found"
         405:
           description: "Invalid input"
         406:
@@ -217,6 +219,8 @@ paths:
             $ref: "#/definitions/Players"
         400:
           description: "Invalid input"
+        404:
+          description: "Table not found"
   /tables/{tableId}/players/{playerId}:
     put:
       tags:
@@ -255,7 +259,7 @@ paths:
         400:
           description: "Invalid input"
         404:
-          description: "Table not found"
+          description: "Player not found"
         405:
           description: "Invalid input"
     get:
@@ -287,7 +291,7 @@ paths:
         400:
           description: "Invalid input"
         404:
-          description: "Table not found"
+          description: "Player not found"
     delete:
       tags:
       - "player"
@@ -313,7 +317,7 @@ paths:
         400:
           description: "Invalid input"
         404:
-          description: "Table not found"
+          description: "Player not found"
   /tables/{tableId}/dealer:
     post:
       tags:
@@ -343,6 +347,8 @@ paths:
           description: "Dealer created"
           schema:
             $ref: "#/definitions/Dealer"
+        404:
+          description: "Table not found"
         405:
           description: "Invalid input"
         406:
@@ -369,6 +375,8 @@ paths:
             $ref: "#/definitions/Dealer"
         400:
           description: "Invalid input"
+        404:
+          description: "Table not found"
     put:
       tags:
       - "dealer"
@@ -423,6 +431,192 @@ paths:
           description: "Invalid input"
         404:
           description: "Table not found"
+  /tables/{tableId}/players/{playerId}/hands:
+    post:
+      tags:
+      - "hand"
+      summary: "Add a hand to player"
+      description: "Creates a hand"
+      operationId: "addHand"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "tableId"
+        in: "path"
+        description: "Table number"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "playerId"
+        in: "path"
+        description: "Player number"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        description: "Hand that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/Hand"
+      responses:
+        201:
+          description: "Hand created"
+          schema:
+            $ref: "#/definitions/Hand"
+        404:
+          description: "Player not found"
+        405:
+          description: "Invalid input"
+        406:
+          description: "Invalid content type"
+    get:
+      tags:
+      - "hand"
+      summary: "Get hands of player"
+      description: "Returns list of hands"
+      operationId: "findHandsByPlayer"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "tableId"
+        in: "path"
+        description: "Table number"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "playerId"
+        in: "path"
+        description: "Player number"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Hands"
+        400:
+          description: "Invalid input"
+        404:
+          description: "Player not found"
+  /tables/{tableId}/players/{playerId}/hands/{handId}:
+    put:
+      tags:
+      - "hand"
+      summary: "Update a hand of player"
+      description: "Modify a hand"
+      operationId: "updateHand"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "tableId"
+        in: "path"
+        description: "Table number"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "playerId"
+        in: "path"
+        description: "Player number"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "handId"
+        in: "path"
+        description: "Hand number"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        description: "Hand that needs to be updated"
+        required: true
+        schema:
+          $ref: "#/definitions/Hand"
+      responses:
+        200:
+          description: "Hand updated"
+          schema:
+            $ref: "#/definitions/Hand"
+        400:
+          description: "Invalid input"
+        404:
+          description: "Hand not found"
+        405:
+          description: "Invalid input"
+    get:
+      tags:
+      - "hand"
+      summary: "Find hand by number"
+      description: "Get hand by number at table"
+      operationId: "getHandBySeat"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "tableId"
+        in: "path"
+        description: "Table number"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "playerId"
+        in: "path"
+        description: "Player number"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "handId"
+        in: "path"
+        description: "Hand number"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Hand"
+        400:
+          description: "Invalid input"
+        404:
+          description: "Hand not found"
+    delete:
+      tags:
+      - "hand"
+      summary: "Delete hand"
+      description: "Remove hand from table"
+      operationId: "deleteHand"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "tableId"
+        in: "path"
+        description: "Table number"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "playerId"
+        in: "path"
+        description: "Player number"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "handId"
+        in: "path"
+        description: "Hand number"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        400:
+          description: "Invalid input"
+        404:
+          description: "Hand not found"
   /tables/{tableId}/rules:
     post:
       tags:
@@ -452,6 +646,8 @@ paths:
           description: "Rules created"
           schema:
             $ref: "#/definitions/Rules"
+        404:
+          description: "Table not found"
         405:
           description: "Invalid input"
         406:
@@ -478,6 +674,8 @@ paths:
             $ref: "#/definitions/Rules"
         400:
           description: "Invalid input"
+        404:
+          description: "Table not found"
     put:
       tags:
       - "rules"
@@ -591,9 +789,7 @@ definitions:
       hands:
         type: "array"
         items:
-          type: "object"
           $ref: "#/definitions/Hand"
-          description: "Hand"
         description: "Hands of player"
   Hand:
     type: "object"
@@ -663,7 +859,6 @@ definitions:
         format: "int64"
         description: "Table hold"
       hand:
-        description: "Hand"
         $ref: "#/definitions/Hand"
   Player:
     type: "object"
@@ -680,7 +875,6 @@ definitions:
         format: "int64"
         description: "Player chip total"
       hand:
-        description: "Hand(s)"
         $ref: "#/definitions/Hands"
   Tables:
     type: "object"
