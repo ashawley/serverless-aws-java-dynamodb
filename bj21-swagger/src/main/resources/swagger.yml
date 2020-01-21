@@ -221,7 +221,7 @@ paths:
           description: "Invalid input"
         404:
           description: "Table not found"
-  /tables/{tableId}/players/{playerId}:
+  /tables/{tableId}/players/{seatId}:
     put:
       tags:
       - "player"
@@ -239,9 +239,9 @@ paths:
         required: true
         type: "integer"
         format: "int64"
-      - name: "playerId"
+      - name: "seatId"
         in: "path"
-        description: "Player number"
+        description: "Seat number"
         required: true
         type: "integer"
         format: "int64"
@@ -265,8 +265,8 @@ paths:
     get:
       tags:
       - "player"
-      summary: "Find player by number"
-      description: "Get player by number at table"
+      summary: "Find player by seat number"
+      description: "Get player by seat number at table"
       operationId: "getPlayerBySeat"
       produces:
       - "application/json"
@@ -277,9 +277,9 @@ paths:
         required: true
         type: "integer"
         format: "int64"
-      - name: "playerId"
+      - name: "seatId"
         in: "path"
-        description: "Player number"
+        description: "Seat number"
         required: true
         type: "integer"
         format: "int64"
@@ -307,9 +307,9 @@ paths:
         required: true
         type: "integer"
         format: "int64"
-      - name: "playerId"
+      - name: "seatId"
         in: "path"
-        description: "Player number"
+        description: "Seat number"
         required: true
         type: "integer"
         format: "int64"
