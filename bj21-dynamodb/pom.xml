@@ -42,14 +42,14 @@
     <dependency>
       <groupId>com.amazonaws</groupId>
       <artifactId>aws-java-sdk-dynamodb</artifactId>
-      <version>1.11.705</version>
+      <version>1.11.777</version>
     </dependency>
 
     <!-- https://s3-us-west-2.amazonaws.com/dynamodb-local/release/com/amazonaws/DynamoDBLocal/maven-metadata.xml -->
     <dependency>
       <groupId>com.amazonaws</groupId>
       <artifactId>DynamoDBLocal</artifactId>
-      <version>1.11.477</version>
+      <version>1.12.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -98,20 +98,20 @@
     <dependency>
       <groupId>com.amazonaws</groupId>
       <artifactId>aws-lambda-java-log4j</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.1</version>
     </dependency>
 
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
-      <version>1.7.28</version>
+      <version>1.7.30</version>
     </dependency>
 
     <!-- Use slf4j-simple instead to show log in console. -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-nop</artifactId>
-      <version>1.7.28</version>
+      <version>1.7.30</version>
       <scope>test</scope>
     </dependency>
 
@@ -125,7 +125,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>2.28.2</version>
+      <version>3.3.3</version>
       <scope>test</scope>
     </dependency>
 
