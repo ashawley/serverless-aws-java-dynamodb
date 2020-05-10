@@ -41,7 +41,7 @@ Invoke a function in the Cloud:
 
 Run DynamoDB test:
 
-    $ mvn test -Dtest=org.ninthfloor.bj21.dynamodb.TablesTest -pl :bj21-dynamodb -am -Dmaven.source.skip -DfailIfNoTests=false
+    $ mvn test -Dtest=org.ninthfloor.bj21.dynamodb.TablesTest -pl :bj21-dynamodb -am -Dmaven.source.skip -Dmdep.skip -DfailIfNoTests=false
 
 The following will emulate invoking a function locally, but it will
 fail because of the table environment variable won't be initialized as

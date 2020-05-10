@@ -100,7 +100,6 @@ public class TablesTest {
         gsonTable.setSeats(0L);
 
         PutItemOutcome put = tables.add(gsonTable);
-        tables.add(gsonTable);
 
         assertNull(put.getItem());
 
