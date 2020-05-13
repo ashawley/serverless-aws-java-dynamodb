@@ -83,11 +83,26 @@ public class AddTableTest
     }
 
     @Test
-    public void testHandleRequestFailure()
+    public void testHandleRequestFailure1()
     {
         APIGatewayProxyResponseEvent response =
             addTable.handleRequest(request, context);
-        // assertEquals(response, actual);
+        assertEquals("application/json",
+                     response.getHeaders().get("Content-Type"));
+        assertNull(response.getHeaders().get("Location"));
+        assertEquals(Integer.valueOf(405), response.getStatusCode());
+        assertEquals("{\"message\":\"Invalid input\",\"file\":\"HTTP-body\"}",
+                     response.getBody());
+    }
+
+    @Test
+    public void testHandleRequestFailure2()
+    {
+        Map<String,String> queryStringParameters = new HashMap<>();
+        table.setId(null);
+        request.setBody(gson.toJson(table));
+        APIGatewayProxyResponseEvent response =
+            addTable.handleRequest(request, context);
         assertEquals("application/json",
                      response.getHeaders().get("Content-Type"));
         assertNull(response.getHeaders().get("Location"));
@@ -109,12 +124,6 @@ public class AddTableTest
         request.setQueryStringParameters(queryStringParameters);
         request.setHeaders(headers);
         table.setId(0L);
-        table.setDecks(0L);
-        table.setSeats(0L);
-        table.setPlayers(0L);
-        table.setMinimum(0L);
-        table.setMaximum(0L);
-        table.setRounds(0L);
         request.setBody(gson.toJson(table));
         APIGatewayProxyResponseEvent response =
             addTable.handleRequest(request, context);
@@ -131,23 +140,22 @@ public class AddTableTest
     {
         Map<String,String> headers = new HashMap<>();
         Map<String,String> queryStringParameters = new HashMap<>();
-        headers.put("",
-                    "");
         request.setHttpMethod("");
         request.setResource("");
         request.setPath("");
         request.setQueryStringParameters(queryStringParameters);
         request.setHeaders(headers);
         request.setBody("");
+        table.setId(0L);
+        request.setBody(gson.toJson(table));
         APIGatewayProxyResponseEvent response =
             addTable.handleRequest(request, context);
-        // assertEquals(response, actual);
         assertEquals("application/json",
                      response.getHeaders().get("Content-Type"));
-        assertEquals(Integer.valueOf(405), response.getStatusCode());
-        assertNull(response.getHeaders().get("Location"));
-        assertEquals("{\"message\":\"Invalid input\",\"file\":\"HTTP-body\"}",
-                     response.getBody());
+        assertEquals(Integer.valueOf(201), response.getStatusCode());
+        assertEquals("https://blackjack.dev/v0/tables/0",
+                     response.getHeaders().get("Location"));
+	assertEquals(gson.toJson(table), response.getBody());
     }
 
     private CreateTableResult createTable(

@@ -95,6 +95,20 @@ public class AddTable
             response.setHeaders(headers);
             response.setBody(gson.toJson(error));
             return response;
+        } else if (table.getId() == null) {
+            logger.error("Missing required id field in JSON");
+            Error error = new Error();
+            error.setMessage("Invalid input");
+            error.setFile("HTTP-body");
+            Map<String,String> headers = new HashMap<>();
+            headers.put("Content-Type",
+                        "application/json");
+            APIGatewayProxyResponseEvent response =
+                new APIGatewayProxyResponseEvent();
+            response.setStatusCode(405);
+            response.setHeaders(headers);
+            response.setBody(gson.toJson(error));
+            return response;
         } // else
 
         Tables tables = new Tables(TABLES_TABLE_NAME, ddb, gson);
