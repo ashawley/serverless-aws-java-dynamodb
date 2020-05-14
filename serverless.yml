@@ -125,7 +125,7 @@ functions:
           response:
             template: $input.path('$')
             statusCodes:
-              201:
+              501:
                 pattern: ''
   findDealerByTable:
     # handler: org.ninthfloor.bj21.lambda.v0.FindDealerByTable
@@ -201,7 +201,7 @@ functions:
           response:
             template: $input.path('$')
             statusCodes:
-              201:
+              501:
                 pattern: ''
   findRulesByTable:
     # handler: org.ninthfloor.bj21.lambda.v0.FindRulesByTable
@@ -260,6 +260,12 @@ functions:
             statusCodes:
               501:
                 pattern: ''
+  notFound:
+    handler: org.ninthfloor.bj21.lambda.v0.NotFound
+    events:
+      - http:
+          path: /{proxy+}
+          method: any
 
 resources:
   Resources:
