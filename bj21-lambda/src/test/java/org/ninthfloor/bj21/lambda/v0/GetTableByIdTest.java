@@ -125,9 +125,8 @@ public class GetTableByIdTest
         request.setPathParameters(pathParameters);
         request.setQueryStringParameters(queryStringParameters);
         request.setHeaders(headers);
-        Table gsonTable = new Table();
-        gsonTable.setId(0L);
-        tables.add(gsonTable);
+        table.setId(0L);
+        tables.add(table);
         APIGatewayProxyResponseEvent response =
             getTableById.handleRequest(request, context);
         assertEquals("application/json",

@@ -67,6 +67,16 @@ public class Tables {
         mapper.save(TableItem.fromGSON(table));
     }
 
+    public Optional<org.ninthfloor.bj21.gson.Table> remove(Long id) {
+        return Optional.ofNullable(
+            ddb.getTable(tablesTableName)
+               .deleteItem("key", "version0", "id", id)
+               .getItem()
+        ).map((Item item) ->
+            gson.fromJson(item.toJSON(), org.ninthfloor.bj21.gson.Table.class)
+        );
+    }
+
     public void remove(org.ninthfloor.bj21.gson.Table table) {
         mapper.delete(TableItem.fromGSON(table));
     }

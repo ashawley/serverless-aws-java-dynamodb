@@ -141,8 +141,7 @@ public class TablesTest {
 
         gsonTable.setDecks(1L);
 
-        TableItem tableItem = tables.load("version0", 0L);
-        tables.update(tableItem);
+        tables.update(gsonTable);
     }
 
     @Test
@@ -170,6 +169,29 @@ public class TablesTest {
         gsonTable.setDecks(1L);
 
         tables.remove(gsonTable);
+    }
+
+    @Test
+    public void removeIdTest() {
+        Optional<org.ninthfloor.bj21.gson.Table> opt =
+            tables.remove(0L);
+
+        assertFalse(opt.isPresent());
+    }
+
+    @Test
+    public void addRemoveIdTest() {
+        org.ninthfloor.bj21.gson.Table gsonTable =
+            new org.ninthfloor.bj21.gson.Table();
+
+        gsonTable.setId(0L);
+
+        PutItemOutcome put = tables.add(gsonTable);
+
+        assertNull(put.getItem());
+
+        Optional<org.ninthfloor.bj21.gson.Table> opt =
+            tables.remove(0L);
     }
 
     private CreateTableResult createTable(
