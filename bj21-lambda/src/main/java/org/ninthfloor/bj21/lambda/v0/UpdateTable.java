@@ -18,6 +18,8 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.apache.commons.lang3.StringUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,6 +72,7 @@ public class UpdateTable
         logger.info("HTTP method: {}", request.getHttpMethod());
         logger.info("Resource path: {}", request.getResource());
         logger.info("Request path: {}", request.getPath());
+        logger.info("Path parameters: {}", request.getPathParameters());
         logger.info("Request query: {}", request.getQueryStringParameters());
         if (request.getHeaders() == null) {
             logger.info("Request headers: {}",
@@ -79,18 +82,67 @@ public class UpdateTable
                         request.getHeaders().get("Accept"));
         }
         logger.info("Request body: {}", request.getBody());
-        logger.error("Responding with a 501 error");
-        Error error = new Error();
-        error.setMessage("Not implemented");
-        error.setFile(request.getHttpMethod() + " " + request.getPath());
+        if (!StringUtils.isNumeric(request.getPathParameters().get("tableId"))) {
+            logger.error("Responding with a 405 error");
+            Error error = new Error();
+            error.setMessage("Invalid input");
+            error.setFile(request.getHttpMethod() + " " + request.getPath());
+            Map<String,String> headers = new HashMap<>();
+            headers.put("Content-Type",
+                        "application/json");
+            APIGatewayProxyResponseEvent response =
+                new APIGatewayProxyResponseEvent();
+            response.setStatusCode(405);
+            response.setHeaders(headers);
+            response.setBody(gson.toJson(error));
+            return response;
+        } // else
+
+        Long tableId = Long.valueOf(request.getPathParameters().get("tableId"));
+        Table table = gson.fromJson(request.getBody(), Table.class);
+
+        if (table == null) {
+            logger.error("Failed to deserialize JSON in request body");
+            Error error = new Error();
+            error.setMessage("Invalid input");
+            error.setFile("HTTP-body");
+            Map<String,String> headers = new HashMap<>();
+            headers.put("Content-Type",
+                        "application/json");
+            APIGatewayProxyResponseEvent response =
+                new APIGatewayProxyResponseEvent();
+            response.setStatusCode(405);
+            response.setHeaders(headers);
+            response.setBody(gson.toJson(error));
+            return response;
+        } else if (table.getId() != null && table.getId() != tableId) {
+            logger.error("The id field in JSON didn't match the path");
+            Error error = new Error();
+            error.setMessage("Invalid input");
+            error.setFile("HTTP-body");
+            Map<String,String> headers = new HashMap<>();
+            headers.put("Content-Type",
+                        "application/json");
+            APIGatewayProxyResponseEvent response =
+                new APIGatewayProxyResponseEvent();
+            response.setStatusCode(405);
+            response.setHeaders(headers);
+            response.setBody(gson.toJson(error));
+            return response;
+        } // else
+
+        table.setId(tableId);
+        Tables tables = new Tables(TABLES_TABLE_NAME, ddb, gson);
+        tables.update(table);
+
         Map<String,String> headers = new HashMap<>();
         headers.put("Content-Type",
                     "application/json");
         APIGatewayProxyResponseEvent response =
             new APIGatewayProxyResponseEvent();
-        response.setStatusCode(501);
+        response.setStatusCode(200); // FIXME: 201 if created
         response.setHeaders(headers);
-        response.setBody(gson.toJson(error));
+        response.setBody(gson.toJson(table));
         return response;
     }
 }

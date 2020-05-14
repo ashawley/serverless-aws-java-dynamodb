@@ -155,7 +155,7 @@ public class AddTableTest
         assertEquals(Integer.valueOf(201), response.getStatusCode());
         assertEquals("https://blackjack.dev/v0/tables/0",
                      response.getHeaders().get("Location"));
-	assertEquals(gson.toJson(table), response.getBody());
+        assertEquals(gson.toJson(table), response.getBody());
     }
 
     private CreateTableResult createTable(

@@ -1,5 +1,6 @@
 package org.ninthfloor.bj21.lambda.v0;
 
+import org.ninthfloor.bj21.dynamodb.Tables;
 import org.ninthfloor.bj21.gson.Table;
 
 import java.util.ArrayList;
@@ -42,6 +43,8 @@ public class UpdateTableTest
 
     private Table table;
 
+    private Tables tables;
+
     private APIGatewayProxyRequestEvent request;
 
     private AmazonDynamoDB ddb;
@@ -80,66 +83,107 @@ public class UpdateTableTest
         updateTable.TABLES_TABLE_NAME = tableName;
         CreateTableResult res =
             createTable(ddb, tableName, attrs, ks, throughput);
+
+        tables = new Tables(tableName, ddb, gson);
     }
 
-    // TODO
     @Test
-    public void testHandleRequestFailure()
+    public void testHandleRequestFailure1()
     {
+        Map<String,String> headers = new HashMap<>();
+        Map<String,String> pathParameters = new HashMap<>();
+        Map<String,String> queryStringParameters = new HashMap<>();
+        request.setHttpMethod("");
+        request.setResource("");
+        request.setPath("");
+        request.setPathParameters(pathParameters);
+        request.setQueryStringParameters(queryStringParameters);
+        request.setHeaders(headers);
+        request.setBody("");
         APIGatewayProxyResponseEvent response =
             updateTable.handleRequest(request, context);
-        // assertEquals(response, actual);
         assertEquals("application/json",
                      response.getHeaders().get("Content-Type"));
         assertNull(response.getHeaders().get("Location"));
-        assertEquals(Integer.valueOf(501), response.getStatusCode());
-        assertEquals("{\"message\":\"Not implemented\",\"file\":\"null null\"}",
+        assertEquals(Integer.valueOf(405), response.getStatusCode());
+        assertEquals("{\"message\":\"Invalid input\",\"file\":\" \"}",
                      response.getBody());
     }
 
-    // TODO
     @Test
     public void testHandleRequestSuccess1()
     {
         Map<String,String> headers = new HashMap<>();
+        Map<String,String> pathParameters = new HashMap<>();
         Map<String,String> queryStringParameters = new HashMap<>();
         headers.put("Accept",
                     "application/json");
+        pathParameters.put("tableId", "0");
         request.setHttpMethod("PUT");
         request.setResource("");
         request.setPath("/v0/tables/0");
+        request.setPathParameters(pathParameters);
         request.setQueryStringParameters(queryStringParameters);
         request.setHeaders(headers);
+        table.setId(0L);
+        table.setDecks(1L);
+        tables.add(table);
+        table.setDecks(2L); // !
+        request.setBody(gson.toJson(table));
         APIGatewayProxyResponseEvent response =
             updateTable.handleRequest(request, context);
         assertEquals("application/json",
                      response.getHeaders().get("Content-Type"));
-        assertEquals(Integer.valueOf(501), response.getStatusCode());
-        assertEquals("{\"message\":\"Not implemented\",\"file\":\"PUT /v0/tables/0\"}",
+        assertEquals(Integer.valueOf(200), response.getStatusCode());
+        assertEquals("{\"id\":0,\"decks\":2}",
                      response.getBody());
     }
 
-    // TODO
     @Test
-    public void testHandleRequestSuccess2()
+    public void testHandleRequestFailure2()
     {
         Map<String,String> headers = new HashMap<>();
+        Map<String,String> pathParameters = new HashMap<>();
         Map<String,String> queryStringParameters = new HashMap<>();
-        headers.put("",
-                    "");
+        pathParameters.put("tableId", "");
         request.setHttpMethod("");
         request.setResource("");
         request.setPath("");
+        request.setPathParameters(pathParameters);
         request.setQueryStringParameters(queryStringParameters);
         request.setHeaders(headers);
         APIGatewayProxyResponseEvent response =
             updateTable.handleRequest(request, context);
-        // assertEquals(response, actual);
         assertEquals("application/json",
                      response.getHeaders().get("Content-Type"));
-        assertEquals(Integer.valueOf(501), response.getStatusCode());
+        assertEquals(Integer.valueOf(405), response.getStatusCode());
         assertNull(response.getHeaders().get("Location"));
-        assertEquals("{\"message\":\"Not implemented\",\"file\":\" \"}",
+        assertEquals("{\"message\":\"Invalid input\",\"file\":\" \"}",
+                     response.getBody());
+    }
+
+    @Test
+    public void testHandleRequestFailure3()
+    {
+        Map<String,String> headers = new HashMap<>();
+        Map<String,String> pathParameters = new HashMap<>();
+        Map<String,String> queryStringParameters = new HashMap<>();
+        pathParameters.put("tableId", "1");
+        request.setHttpMethod("");
+        request.setResource("");
+        request.setPath("");
+        request.setPathParameters(pathParameters);
+        request.setQueryStringParameters(queryStringParameters);
+        request.setHeaders(headers);
+        table.setId(2L); // !
+        request.setBody(gson.toJson(table));
+        APIGatewayProxyResponseEvent response =
+            updateTable.handleRequest(request, context);
+        assertEquals("application/json",
+                     response.getHeaders().get("Content-Type"));
+        assertEquals(Integer.valueOf(405), response.getStatusCode());
+        assertNull(response.getHeaders().get("Location"));
+        assertEquals("{\"message\":\"Invalid input\",\"file\":\"HTTP-body\"}",
                      response.getBody());
     }
 

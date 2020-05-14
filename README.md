@@ -41,7 +41,8 @@ Invoke a function in the Cloud:
 
 Run DynamoDB test:
 
-    $ mvn test -Dtest=org.ninthfloor.bj21.dynamodb.TablesTest -pl :bj21-dynamodb -am -Dmaven.source.skip -Dmdep.skip -DfailIfNoTests=false
+    $ mvn test -Dtest=org.ninthfloor.bj21.dynamodb.TablesTest -Dmaven.source.skip \
+                -DfailIfNoTests=false -pl :bj21-dynamodb -am
 
 The following will emulate invoking a function locally, but it will
 fail because of the table environment variable won't be initialized as
@@ -51,4 +52,5 @@ a string by Serverless local.
 
 You can run an integration test of a AWS Lambda function:
 
-    $ mvn test -pl :bj21-lambda -am -Dmaven.source.skip -DfailIfNoTests=false -Dtest=org.ninthfloor.bj21.lambda.v0.AddTableTest
+    $ mvn test -Dmdep.skip  -Dmaven.source.skip -DfailIfNoTests=false \
+               -Dtest=org.ninthfloor.bj21.lambda.v0.AddTableTest -pl :bj21-lambda -am
