@@ -126,6 +126,17 @@
 
       </plugin>
 
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <links>
+            <link>https://www.javadoc.io/doc/com.google.code.gson/gson/2.8.5/</link>
+            <link>https://javadoc.io/doc/com.github.jknack/handlebars/4.2.0/</link>
+            <link>http://docs.swagger.io/swagger-core/v1.5.X/apidocs/</link>
+          </links>
+        </configuration>
+      </plugin>
+
     </plugins>
 
   </build>

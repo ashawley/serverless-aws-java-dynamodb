@@ -241,6 +241,19 @@
         </executions>
       </plugin>
 
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <links>
+            <link>https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/</link>
+            <link>https://javadoc.io/doc/com.amazonaws/aws-lambda-java-events/2.2.8/</link>
+            <link>https://javadoc.io/doc/com.amazonaws/aws-lambda-java-core/1.2.0/</link>
+            <link>https://javadoc.io/doc/com.github.jknack/handlebars/4.2.0/</link>
+            <link>http://docs.swagger.io/swagger-core/v1.5.X/apidocs/</link>
+          </links>
+        </configuration>
+      </plugin>
+
     </plugins>
 
   </build>
