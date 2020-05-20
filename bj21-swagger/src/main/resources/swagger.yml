@@ -431,7 +431,7 @@ paths:
           description: "Invalid input"
         404:
           description: "Table not found"
-  /tables/{tableId}/players/{playerId}/hands:
+  /tables/{tableId}/players/{seatId}/hands:
     post:
       tags:
       - "hand"
@@ -449,7 +449,7 @@ paths:
         required: true
         type: "integer"
         format: "int64"
-      - name: "playerId"
+      - name: "seatId"
         in: "path"
         description: "Player number"
         required: true
@@ -487,7 +487,7 @@ paths:
         required: true
         type: "integer"
         format: "int64"
-      - name: "playerId"
+      - name: "seatId"
         in: "path"
         description: "Player number"
         required: true
@@ -502,7 +502,7 @@ paths:
           description: "Invalid input"
         404:
           description: "Player not found"
-  /tables/{tableId}/players/{playerId}/hands/{handId}:
+  /tables/{tableId}/players/{seatId}/hands/{handId}:
     put:
       tags:
       - "hand"
@@ -520,7 +520,7 @@ paths:
         required: true
         type: "integer"
         format: "int64"
-      - name: "playerId"
+      - name: "seatId"
         in: "path"
         description: "Player number"
         required: true
@@ -564,7 +564,7 @@ paths:
         required: true
         type: "integer"
         format: "int64"
-      - name: "playerId"
+      - name: "seatId"
         in: "path"
         description: "Player number"
         required: true
@@ -600,7 +600,7 @@ paths:
         required: true
         type: "integer"
         format: "int64"
-      - name: "playerId"
+      - name: "seatId"
         in: "path"
         description: "Player number"
         required: true
@@ -782,6 +782,10 @@ definitions:
     - "bet"
     - "hands"
     properties:
+      seatId:
+        type: "integer"
+        format: "int64"
+        description: "Player number"
       bet:
         type: "integer"
         format: "int64"
@@ -789,8 +793,9 @@ definitions:
       hands:
         type: "array"
         items:
-          $ref: "#/definitions/Hand"
-        description: "Hands of player"
+          type: "integer"
+          format: "int64"
+        description: "Hand numbers"
   Hand:
     type: "object"
     required:
@@ -854,6 +859,10 @@ definitions:
     - "chips"
     - "hand"
     properties:
+      tableId:
+        type: "integer"
+        format: "int64"
+        description: "Table number"
       chips:
         type: "integer"
         format: "int64"
@@ -927,6 +936,10 @@ definitions:
   Shoe:
     type: "object"
     properties:
+      tableId:
+        type: "integer"
+        format: "int64"
+        description: "Table number"
       decks:
         type: "integer"
         format: "int64"
@@ -962,6 +975,10 @@ definitions:
   Rules:
     type: "object"
     properties:
+      tableId:
+        type: "integer"
+        format: "int64"
+        description: "Table number"
       blackjackPays:
         type: "string"
         enum: *PAYS

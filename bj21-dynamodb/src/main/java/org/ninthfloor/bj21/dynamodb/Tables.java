@@ -42,6 +42,10 @@ public class Tables {
         return ddb.getTable(tablesTableName).putItem(item);
     }
 
+    public org.ninthfloor.bj21.gson.Table toJSON(Item item) {
+        return gson.fromJson(item.toJSON(), org.ninthfloor.bj21.gson.Table.class);
+    }
+
     public Optional<Item> getItem(Long id) {
         return Optional.ofNullable(
             ddb.getTable(tablesTableName).getItem("key", "version0", "id", id)
@@ -49,9 +53,7 @@ public class Tables {
     }
 
     public Optional<org.ninthfloor.bj21.gson.Table> getById(Long id) {
-        return getItem(id).map((Item item) ->
-            gson.fromJson(item.toJSON(), org.ninthfloor.bj21.gson.Table.class)
-        );
+        return getItem(id).map(this::toJSON);
     }
 
     public TableItem load(String key, Long id) {

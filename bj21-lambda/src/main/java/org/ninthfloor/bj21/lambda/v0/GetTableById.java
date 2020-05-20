@@ -38,7 +38,7 @@ public class GetTableById
 
     // This field is mutable and is public.
     // This is used by the test suite,
-    // and minimizes the number of environment variables.
+    // minimizing the need of environment variables.
     public String TABLES_TABLE_NAME =
         System.getenv("TABLES_TABLE_NAME");
 

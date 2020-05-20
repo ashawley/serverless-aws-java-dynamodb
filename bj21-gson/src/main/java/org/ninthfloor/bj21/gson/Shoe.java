@@ -27,8 +27,12 @@ import java.io.IOException;
 /**
  * Shoe
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-01-17T14:08:06.540-05:00[America/New_York]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-05-19T09:07:39.626-04:00[America/New_York]")
 public class Shoe {
+  public static final String SERIALIZED_NAME_TABLE_ID = "tableId";
+  @SerializedName(SERIALIZED_NAME_TABLE_ID)
+  private Long tableId;
+
   public static final String SERIALIZED_NAME_DECKS = "decks";
   @SerializedName(SERIALIZED_NAME_DECKS)
   private Long decks;
@@ -44,6 +48,29 @@ public class Shoe {
   public static final String SERIALIZED_NAME_CUT = "cut";
   @SerializedName(SERIALIZED_NAME_CUT)
   private Long cut;
+
+
+  public Shoe tableId(Long tableId) {
+    
+    this.tableId = tableId;
+    return this;
+  }
+
+   /**
+   * Table number
+   * @return tableId
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "Table number")
+
+  public Long getTableId() {
+    return tableId;
+  }
+
+
+  public void setTableId(Long tableId) {
+    this.tableId = tableId;
+  }
 
 
   public Shoe decks(Long decks) {
@@ -147,7 +174,8 @@ public class Shoe {
       return false;
     }
     Shoe shoe = (Shoe) o;
-    return Objects.equals(this.decks, shoe.decks) &&
+    return Objects.equals(this.tableId, shoe.tableId) &&
+        Objects.equals(this.decks, shoe.decks) &&
         Objects.equals(this.rounds, shoe.rounds) &&
         Objects.equals(this.discard, shoe.discard) &&
         Objects.equals(this.cut, shoe.cut);
@@ -155,7 +183,7 @@ public class Shoe {
 
   @Override
   public int hashCode() {
-    return Objects.hash(decks, rounds, discard, cut);
+    return Objects.hash(tableId, decks, rounds, discard, cut);
   }
 
 
@@ -163,6 +191,7 @@ public class Shoe {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Shoe {\n");
+    sb.append("    tableId: ").append(toIndentedString(tableId)).append("\n");
     sb.append("    decks: ").append(toIndentedString(decks)).append("\n");
     sb.append("    rounds: ").append(toIndentedString(rounds)).append("\n");
     sb.append("    discard: ").append(toIndentedString(discard)).append("\n");

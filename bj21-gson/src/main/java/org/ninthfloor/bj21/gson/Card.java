@@ -27,7 +27,7 @@ import java.io.IOException;
 /**
  * Card
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-01-17T14:08:06.540-05:00[America/New_York]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-05-19T09:07:39.626-04:00[America/New_York]")
 public class Card {
   /**
    * Card suit

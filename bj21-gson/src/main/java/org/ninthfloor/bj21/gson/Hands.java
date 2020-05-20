@@ -25,20 +25,46 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import org.ninthfloor.bj21.gson.Hand;
 
 /**
  * Hands
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-01-17T14:08:06.540-05:00[America/New_York]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-05-19T09:07:39.626-04:00[America/New_York]")
 public class Hands {
+  public static final String SERIALIZED_NAME_SEAT_ID = "seatId";
+  @SerializedName(SERIALIZED_NAME_SEAT_ID)
+  private Long seatId;
+
   public static final String SERIALIZED_NAME_BET = "bet";
   @SerializedName(SERIALIZED_NAME_BET)
   private Long bet;
 
   public static final String SERIALIZED_NAME_HANDS = "hands";
   @SerializedName(SERIALIZED_NAME_HANDS)
-  private List<Hand> hands = new ArrayList<>();
+  private List<Long> hands = new ArrayList<>();
+
+
+  public Hands seatId(Long seatId) {
+    
+    this.seatId = seatId;
+    return this;
+  }
+
+   /**
+   * Player number
+   * @return seatId
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "Player number")
+
+  public Long getSeatId() {
+    return seatId;
+  }
+
+
+  public void setSeatId(Long seatId) {
+    this.seatId = seatId;
+  }
 
 
   public Hands bet(Long bet) {
@@ -63,29 +89,29 @@ public class Hands {
   }
 
 
-  public Hands hands(List<Hand> hands) {
+  public Hands hands(List<Long> hands) {
     
     this.hands = hands;
     return this;
   }
 
-  public Hands addHandsItem(Hand handsItem) {
+  public Hands addHandsItem(Long handsItem) {
     this.hands.add(handsItem);
     return this;
   }
 
    /**
-   * Hands of player
+   * Hand numbers
    * @return hands
   **/
-  @ApiModelProperty(required = true, value = "Hands of player")
+  @ApiModelProperty(required = true, value = "Hand numbers")
 
-  public List<Hand> getHands() {
+  public List<Long> getHands() {
     return hands;
   }
 
 
-  public void setHands(List<Hand> hands) {
+  public void setHands(List<Long> hands) {
     this.hands = hands;
   }
 
@@ -99,13 +125,14 @@ public class Hands {
       return false;
     }
     Hands hands = (Hands) o;
-    return Objects.equals(this.bet, hands.bet) &&
+    return Objects.equals(this.seatId, hands.seatId) &&
+        Objects.equals(this.bet, hands.bet) &&
         Objects.equals(this.hands, hands.hands);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(bet, hands);
+    return Objects.hash(seatId, bet, hands);
   }
 
 
@@ -113,6 +140,7 @@ public class Hands {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Hands {\n");
+    sb.append("    seatId: ").append(toIndentedString(seatId)).append("\n");
     sb.append("    bet: ").append(toIndentedString(bet)).append("\n");
     sb.append("    hands: ").append(toIndentedString(hands)).append("\n");
     sb.append("}");

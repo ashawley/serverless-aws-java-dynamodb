@@ -28,8 +28,12 @@ import org.ninthfloor.bj21.gson.Hand;
 /**
  * Dealer
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-01-17T14:08:06.540-05:00[America/New_York]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-05-19T09:07:39.626-04:00[America/New_York]")
 public class Dealer {
+  public static final String SERIALIZED_NAME_TABLE_ID = "tableId";
+  @SerializedName(SERIALIZED_NAME_TABLE_ID)
+  private Long tableId;
+
   public static final String SERIALIZED_NAME_CHIPS = "chips";
   @SerializedName(SERIALIZED_NAME_CHIPS)
   private Long chips;
@@ -37,6 +41,29 @@ public class Dealer {
   public static final String SERIALIZED_NAME_HAND = "hand";
   @SerializedName(SERIALIZED_NAME_HAND)
   private Hand hand;
+
+
+  public Dealer tableId(Long tableId) {
+    
+    this.tableId = tableId;
+    return this;
+  }
+
+   /**
+   * Table number
+   * @return tableId
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "Table number")
+
+  public Long getTableId() {
+    return tableId;
+  }
+
+
+  public void setTableId(Long tableId) {
+    this.tableId = tableId;
+  }
 
 
   public Dealer chips(Long chips) {
@@ -92,13 +119,14 @@ public class Dealer {
       return false;
     }
     Dealer dealer = (Dealer) o;
-    return Objects.equals(this.chips, dealer.chips) &&
+    return Objects.equals(this.tableId, dealer.tableId) &&
+        Objects.equals(this.chips, dealer.chips) &&
         Objects.equals(this.hand, dealer.hand);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(chips, hand);
+    return Objects.hash(tableId, chips, hand);
   }
 
 
@@ -106,6 +134,7 @@ public class Dealer {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Dealer {\n");
+    sb.append("    tableId: ").append(toIndentedString(tableId)).append("\n");
     sb.append("    chips: ").append(toIndentedString(chips)).append("\n");
     sb.append("    hand: ").append(toIndentedString(hand)).append("\n");
     sb.append("}");

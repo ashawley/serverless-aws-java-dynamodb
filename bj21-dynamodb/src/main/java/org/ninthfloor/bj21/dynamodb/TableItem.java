@@ -35,11 +35,11 @@ public class TableItem {
 
     @DynamoDBHashKey(attributeName="key")
     public String getKey() { return key; }
-    public void setKey(String key) {this.key = key; }
+    public void setKey(String key) { this.key = key; }
 
     @DynamoDBRangeKey(attributeName="id")
     public Long getId() { return id; }
-    public void setId(Long id) {this.id = id; }
+    public void setId(Long id) { this.id = id; }
 
     @DynamoDBAttribute(attributeName="decks")
     public Long getDecks() {return decks; }

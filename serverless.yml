@@ -6,9 +6,45 @@ provider:
   name: aws
   runtime: java8
   environment:
+    HANDS_TABLE_NAME:
+      Ref: handsTable
+    PLAYERS_TABLE_NAME:
+      Ref: playersTable
     TABLES_TABLE_NAME:
       Ref: tablesTable
   iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DeleteItem
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+      Resource:
+        "Fn::Join":
+          - ""
+          -
+            - "arn:aws:dynamodb:"
+            - Ref: "AWS::Region"
+            - ":"
+            - Ref: "AWS::AccountId"
+            - ":table/"
+            - Ref: handsTable
+    - Effect: Allow
+      Action:
+        - dynamodb:DeleteItem
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+      Resource:
+        "Fn::Join":
+          - ""
+          -
+            - "arn:aws:dynamodb:"
+            - Ref: "AWS::Region"
+            - ":"
+            - Ref: "AWS::AccountId"
+            - ":table/"
+            - Ref: playersTable
     - Effect: Allow
       Action:
         - dynamodb:DeleteItem
@@ -108,6 +144,55 @@ functions:
             paths:
               tableId: true
               seatId: true
+  addHand:
+    handler: org.ninthfloor.bj21.lambda.v0.AddHand
+    events:
+      - http:
+          path: /v0/tables/{tableId}/players/{seatId}/hands
+          method: post
+          parameters:
+            paths:
+              tableId: true
+              seatId: true
+  findHandsByHand:
+    handler: org.ninthfloor.bj21.lambda.v0.FindHandsByHand
+    events:
+      - http:
+          path: /v0/tables/{tableId}/players
+          method: get
+  getHandBySeat:
+    handler: org.ninthfloor.bj21.lambda.v0.GetHandBySeat
+    events:
+      - http:
+          path: /v0/tables/{tableId}/players/{seatId}/hands/{handId}
+          method: get
+          parameters:
+            paths:
+              tableId: true
+              seatId: true
+              handId: true
+  updateHand:
+    handler: org.ninthfloor.bj21.lambda.v0.UpdateHand
+    events:
+      - http:
+          path: /v0/tables/{tableId}/players/{seatId}/hands/{handId}
+          method: put
+          parameters:
+            paths:
+              tableId: true
+              seatId: true
+              handId: true
+  deleteHand:
+    handler: org.ninthfloor.bj21.lambda.v0.DeleteHand
+    events:
+      - http:
+          path: /v0/tables/{tableId}/players/{seatId}/hands/{handId}
+          method: delete
+          parameters:
+            paths:
+              tableId: true
+              seatId: true
+              handId: true
   addDealer:
     # handler: org.ninthfloor.bj21.lambda.v0.AddDealer
     handler: org.ninthfloor.bj21.lambda.v0.Dummy
@@ -269,6 +354,38 @@ functions:
 
 resources:
   Resources:
+    handsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: key
+            AttributeType: S
+          - AttributeName: id
+            AttributeType: N
+        KeySchema:
+          - AttributeName: key
+            KeyType: HASH
+          - AttributeName: id
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    playersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: key
+            AttributeType: S
+          - AttributeName: id
+            AttributeType: N
+        KeySchema:
+          - AttributeName: key
+            KeyType: HASH
+          - AttributeName: id
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
     tablesTable:
       Type: AWS::DynamoDB::Table
       Properties:

@@ -28,8 +28,12 @@ import org.ninthfloor.bj21.gson.RulesDealerStands;
 /**
  * Rules
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-01-17T14:08:06.540-05:00[America/New_York]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-05-19T09:07:39.626-04:00[America/New_York]")
 public class Rules {
+  public static final String SERIALIZED_NAME_TABLE_ID = "tableId";
+  @SerializedName(SERIALIZED_NAME_TABLE_ID)
+  private Long tableId;
+
   /**
    * Payout for Blackjack (defaults: 3 to 2)
    */
@@ -84,6 +88,29 @@ public class Rules {
   public static final String SERIALIZED_NAME_DEALER_STANDS = "dealerStands";
   @SerializedName(SERIALIZED_NAME_DEALER_STANDS)
   private RulesDealerStands dealerStands;
+
+
+  public Rules tableId(Long tableId) {
+    
+    this.tableId = tableId;
+    return this;
+  }
+
+   /**
+   * Table number
+   * @return tableId
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "Table number")
+
+  public Long getTableId() {
+    return tableId;
+  }
+
+
+  public void setTableId(Long tableId) {
+    this.tableId = tableId;
+  }
 
 
   public Rules blackjackPays(BlackjackPaysEnum blackjackPays) {
@@ -141,13 +168,14 @@ public class Rules {
       return false;
     }
     Rules rules = (Rules) o;
-    return Objects.equals(this.blackjackPays, rules.blackjackPays) &&
+    return Objects.equals(this.tableId, rules.tableId) &&
+        Objects.equals(this.blackjackPays, rules.blackjackPays) &&
         Objects.equals(this.dealerStands, rules.dealerStands);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(blackjackPays, dealerStands);
+    return Objects.hash(tableId, blackjackPays, dealerStands);
   }
 
 
@@ -155,6 +183,7 @@ public class Rules {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Rules {\n");
+    sb.append("    tableId: ").append(toIndentedString(tableId)).append("\n");
     sb.append("    blackjackPays: ").append(toIndentedString(blackjackPays)).append("\n");
     sb.append("    dealerStands: ").append(toIndentedString(dealerStands)).append("\n");
     sb.append("}");
