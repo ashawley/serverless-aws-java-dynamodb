@@ -42,14 +42,14 @@
     <dependency>
       <groupId>com.amazonaws</groupId>
       <artifactId>aws-java-sdk-dynamodb</artifactId>
-      <version>1.11.777</version>
+      <version>1.11.778</version>
     </dependency>
 
     <!-- https://s3-us-west-2.amazonaws.com/dynamodb-local/release/com/amazonaws/DynamoDBLocal/maven-metadata.xml -->
     <dependency>
       <groupId>com.amazonaws</groupId>
       <artifactId>DynamoDBLocal</artifactId>
-      <version>1.12.0</version>
+      <version>1.13.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
