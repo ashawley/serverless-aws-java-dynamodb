@@ -1,3 +1,4 @@
 target/
+*.versionsBackup
 .serverless/
 .openapi-generator/

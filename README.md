@@ -54,3 +54,11 @@ You can run an integration test of a AWS Lambda function:
 
     $ mvn test -Dmdep.skip  -Dmaven.source.skip -DfailIfNoTests=false \
                -Dtest=org.ninthfloor.bj21.lambda.v0.AddTableTest -pl :bj21-lambda -am
+
+To update dependencies to the next version::
+
+    $ mvn versions:use-next-versions
+
+To see if any pinned Maven plugins can be updated:
+
+    $ mvn versions:display-plugin-updates
