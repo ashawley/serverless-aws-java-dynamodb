@@ -5,6 +5,7 @@ frameworkVersion: ">=1.8.0 <2.0.0"
 provider:
   name: aws
   runtime: java8
+  memorySize: 512
   environment:
     HANDS_TABLE_NAME:
       Ref: handsTable
@@ -194,8 +195,7 @@ functions:
               seatId: true
               handId: true
   addDealer:
-    # handler: org.ninthfloor.bj21.lambda.v0.AddDealer
-    handler: org.ninthfloor.bj21.lambda.v0.Dummy
+    handler: org.ninthfloor.bj21.lambda.v0.AddDealer
     events:
       - http:
           path: /v0/tables/{tableId}/dealer
@@ -213,8 +213,7 @@ functions:
               501:
                 pattern: ''
   findDealerByTable:
-    # handler: org.ninthfloor.bj21.lambda.v0.FindDealerByTable
-    handler: org.ninthfloor.bj21.lambda.v0.Dummy
+    handler: org.ninthfloor.bj21.lambda.v0.FindDealerByTable
     events:
       - http:
           path: /v0/tables/{tableId}/dealer
@@ -232,8 +231,7 @@ functions:
               501:
                 pattern: ''
   updateDealer:
-    # handler: org.ninthfloor.bj21.lambda.v0.UpdateDealer
-    handler: org.ninthfloor.bj21.lambda.v0.Dummy
+    handler: org.ninthfloor.bj21.lambda.v0.UpdateDealer
     events:
       - http:
           path: /v0/tables/{tableId}/dealer
@@ -251,8 +249,7 @@ functions:
               501:
                 pattern: ''
   deleteDealer:
-    # handler: org.ninthfloor.bj21.lambda.v0.DeleteDealer
-    handler: org.ninthfloor.bj21.lambda.v0.Dummy
+    handler: org.ninthfloor.bj21.lambda.v0.DeleteDealer
     events:
       - http:
           path: /v0/tables/{tableId}/dealer
@@ -270,8 +267,7 @@ functions:
               501:
                 pattern: ''
   addRules:
-    # handler: org.ninthfloor.bj21.lambda.v0.AddRules
-    handler: org.ninthfloor.bj21.lambda.v0.Dummy
+    handler: org.ninthfloor.bj21.lambda.v0.AddRules
     events:
       - http:
           path: /v0/tables/{tableId}/rules
@@ -289,8 +285,7 @@ functions:
               501:
                 pattern: ''
   findRulesByTable:
-    # handler: org.ninthfloor.bj21.lambda.v0.FindRulesByTable
-    handler: org.ninthfloor.bj21.lambda.v0.Dummy
+    handler: org.ninthfloor.bj21.lambda.v0.FindRulesByTable
     events:
       - http:
           path: /v0/tables/{tableId}/rules
@@ -308,8 +303,7 @@ functions:
               501:
                 pattern: ''
   updateRules:
-    # handler: org.ninthfloor.bj21.lambda.v0.UpdateRules
-    handler: org.ninthfloor.bj21.lambda.v0.Dummy
+    handler: org.ninthfloor.bj21.lambda.v0.UpdateRules
     events:
       - http:
           path: /v0/tables/{tableId}/rules
@@ -327,8 +321,7 @@ functions:
               501:
                 pattern: ''
   deleteRules:
-    # handler: org.ninthfloor.bj21.lambda.v0.DeleteRules
-    handler: org.ninthfloor.bj21.lambda.v0.Dummy
+    handler: org.ninthfloor.bj21.lambda.v0.DeleteRules
     events:
       - http:
           path: /v0/tables/{tableId}/rules
