@@ -82,7 +82,8 @@ public class GetTableById
             logger.info("Accept header: {}",
                         request.getHeaders().get("Accept"));
         }
-        if (!StringUtils.isNumeric(request.getPathParameters().get("tableId"))) {
+        String tableIdParam = request.getPathParameters().get("tableId");
+        if (!StringUtils.isNumeric(tableIdParam)) {
             logger.error("Responding with a 405 error");
             Error error = new Error();
             error.setMessage("Invalid input");
@@ -98,22 +99,10 @@ public class GetTableById
             return response;
         } // else
 
-        Long tableId = Long.valueOf(request.getPathParameters().get("tableId"));
+        Long tableId = Long.valueOf(tableIdParam);
         Tables tables = new Tables(TABLES_TABLE_NAME, ddb, gson);
         Optional<Table> table = tables.getById(tableId);
-        if (table.isPresent()) {
-            logger.info("Request body: {}", request.getBody());
-            logger.info("Responding with a 200 error");
-            Map<String,String> headers = new HashMap<>();
-            headers.put("Content-Type",
-                        "application/json");
-            APIGatewayProxyResponseEvent response =
-                new APIGatewayProxyResponseEvent();
-            response.setStatusCode(200);
-            response.setHeaders(headers);
-            response.setBody(gson.toJson(table.get()));
-            return response;
-        } else {
+        if (!table.isPresent()) {
             logger.error("Responding with a 404 error");
             Error error = new Error();
             error.setMessage("Not found");
@@ -127,6 +116,17 @@ public class GetTableById
             response.setHeaders(headers);
             response.setBody(gson.toJson(error));
             return response;
-        }
+        } // else
+
+        logger.info("Responding with a 200 error");
+        Map<String,String> headers = new HashMap<>();
+        headers.put("Content-Type",
+                    "application/json");
+        APIGatewayProxyResponseEvent response =
+            new APIGatewayProxyResponseEvent();
+        response.setStatusCode(200);
+        response.setHeaders(headers);
+        response.setBody(gson.toJson(table.get()));
+        return response;
     }
 }

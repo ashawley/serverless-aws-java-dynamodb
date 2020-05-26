@@ -27,7 +27,7 @@ import java.io.IOException;
 /**
  * Shoe
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-05-19T09:07:39.626-04:00[America/New_York]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-05-26T09:55:48.852-04:00[America/New_York]")
 public class Shoe {
   public static final String SERIALIZED_NAME_TABLE_ID = "tableId";
   @SerializedName(SERIALIZED_NAME_TABLE_ID)

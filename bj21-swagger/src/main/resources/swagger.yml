@@ -451,7 +451,7 @@ paths:
         format: "int64"
       - name: "seatId"
         in: "path"
-        description: "Player number"
+        description: "Seat number"
         required: true
         type: "integer"
         format: "int64"
@@ -489,7 +489,7 @@ paths:
         format: "int64"
       - name: "seatId"
         in: "path"
-        description: "Player number"
+        description: "Seat number"
         required: true
         type: "integer"
         format: "int64"
@@ -522,7 +522,7 @@ paths:
         format: "int64"
       - name: "seatId"
         in: "path"
-        description: "Player number"
+        description: "Seat number"
         required: true
         type: "integer"
         format: "int64"
@@ -554,7 +554,7 @@ paths:
       - "hand"
       summary: "Find hand by number"
       description: "Get hand by number at table"
-      operationId: "getHandBySeat"
+      operationId: "getHandById"
       produces:
       - "application/json"
       parameters:
@@ -566,7 +566,7 @@ paths:
         format: "int64"
       - name: "seatId"
         in: "path"
-        description: "Player number"
+        description: "Seat number"
         required: true
         type: "integer"
         format: "int64"
@@ -602,7 +602,7 @@ paths:
         format: "int64"
       - name: "seatId"
         in: "path"
-        description: "Player number"
+        description: "Seat number"
         required: true
         type: "integer"
         format: "int64"
@@ -785,7 +785,7 @@ definitions:
       seatId:
         type: "integer"
         format: "int64"
-        description: "Player number"
+        description: "Seat number"
       bet:
         type: "integer"
         format: "int64"
