@@ -46,7 +46,8 @@ public class AddTableTest
 
     private AmazonDynamoDB ddb;
 
-    final private GsonBuilder gsonBuilder = new GsonBuilder();
+    final private GsonBuilder gsonBuilder =
+        new GsonBuilder();
 
     private Gson gson;
 
@@ -145,7 +146,6 @@ public class AddTableTest
         request.setPath("");
         request.setQueryStringParameters(queryStringParameters);
         request.setHeaders(headers);
-        request.setBody("");
         table.setId(0L);
         request.setBody(gson.toJson(table));
         APIGatewayProxyResponseEvent response =

@@ -33,7 +33,7 @@ public class DeleteTable
     final private GsonBuilder gsonBuilder =
         new GsonBuilder();
 
-    private Gson gson =
+    final private Gson gson =
         gsonBuilder.create();
 
     // This field is mutable and is public.

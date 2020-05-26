@@ -61,7 +61,8 @@ public class AddHandTest
 
     private AmazonDynamoDB ddb;
 
-    final private GsonBuilder gsonBuilder = new GsonBuilder();
+    final private GsonBuilder gsonBuilder =
+        new GsonBuilder();
 
     private Gson gson;
 
@@ -211,7 +212,6 @@ public class AddHandTest
         request.setHttpMethod("POST");
         request.setResource("/v0/tables/0/players/0/hands");
         request.setPath("");
-        request.setHttpMethod("POST");
         request.setPathParameters(pathParameters);
         request.setQueryStringParameters(queryStringParameters);
         request.setHeaders(headers);

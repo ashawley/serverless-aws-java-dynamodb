@@ -32,7 +32,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AddHand
+public class UpdateHand
     implements RequestHandler<APIGatewayProxyRequestEvent,
                               APIGatewayProxyResponseEvent>
 {
@@ -58,7 +58,7 @@ public class AddHand
         System.getenv("TABLES_TABLE_NAME");
 
     private final static Logger logger =
-        LoggerFactory.getLogger(AddHand.class);
+        LoggerFactory.getLogger(UpdateHand.class);
 
     /**
      * Constructor for test suite.
@@ -67,7 +67,7 @@ public class AddHand
      *
      * @param   ddb     AmazonDynamoDB
      */
-    public AddHand(AmazonDynamoDB ddb) {
+    public UpdateHand(AmazonDynamoDB ddb) {
         this.ddb = ddb;
     }
 
@@ -77,7 +77,7 @@ public class AddHand
      * This is not called by the test suite.
      * This will auto-configure the {@link AmazonDynamoDB} connection.
      */
-    public AddHand() {
+    public UpdateHand() {
         this(AmazonDynamoDBClientBuilder.standard().build());
     }
 
@@ -236,6 +236,28 @@ public class AddHand
             return response;
         } // else
 
+        String handIdParam = request.getPathParameters().get("handId");
+        if (!StringUtils.isNumeric(handIdParam)) {
+            logger.error("Responding with a 405 error");
+            Error error = new Error();
+            error.setMessage("Invalid input");
+            String path =
+                format(handlebars,
+                       "/v0/tables/{{tableId}}/players/{{seatId}}/hands/{{handId}}",
+                       request.getPathParameters());
+            error.setFile(request.getHttpMethod() + " " + path);
+            Map<String,String> headers = new HashMap<>();
+            headers.put("Content-Type",
+                        "application/json");
+            APIGatewayProxyResponseEvent response =
+                new APIGatewayProxyResponseEvent();
+            response.setStatusCode(405);
+            response.setHeaders(headers);
+            response.setBody(gson.toJson(error));
+            return response;
+        } // else
+
+        Long handId = Long.valueOf(handIdParam);
         Hand hand = gson.fromJson(request.getBody(), Hand.class);
 
         if (hand == null) {
@@ -252,8 +274,8 @@ public class AddHand
             response.setHeaders(headers);
             response.setBody(gson.toJson(error));
             return response;
-        } else if (hand.getId() == null) {
-            logger.error("Missing required id field in JSON");
+        } else if (hand.getId() != null && hand.getId() != handId) {
+            logger.error("The id field in JSON didn't match the path");
             Error error = new Error();
             error.setMessage("Invalid input");
             error.setFile("HTTP-body");
@@ -268,17 +290,16 @@ public class AddHand
             return response;
         } // else
 
+        hand.setId(handId);
         Hands hands = new Hands(HANDS_TABLE_NAME, ddb, gson);
-        hands.add(hand);
+        hands.update(hand);
 
         Map<String,String> headers = new HashMap<>();
-        headers.put("Location",
-                    "https://blackjack.dev/v0/tables/0/players/0/hands");
         headers.put("Content-Type",
                     "application/json");
         APIGatewayProxyResponseEvent response =
             new APIGatewayProxyResponseEvent();
-        response.setStatusCode(201);
+        response.setStatusCode(200); // FIXME: 201 if created
         response.setHeaders(headers);
         response.setBody(gson.toJson(hand));
         return response;

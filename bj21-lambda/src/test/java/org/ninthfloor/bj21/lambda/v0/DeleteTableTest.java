@@ -49,7 +49,8 @@ public class DeleteTableTest
 
     private AmazonDynamoDB ddb;
 
-    final private GsonBuilder gsonBuilder = new GsonBuilder();
+    final private GsonBuilder gsonBuilder =
+        new GsonBuilder();
 
     private Gson gson;
 

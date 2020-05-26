@@ -23,7 +23,7 @@ public class NotFound
     final private GsonBuilder gsonBuilder =
         new GsonBuilder();
 
-    private Gson gson =
+    final private Gson gson =
         gsonBuilder.create();
 
     private final static Logger logger =

@@ -1,6 +1,10 @@
 package org.ninthfloor.bj21.lambda.v0;
 
+import org.ninthfloor.bj21.dynamodb.Hands;
+import org.ninthfloor.bj21.dynamodb.Players;
 import org.ninthfloor.bj21.dynamodb.Tables;
+import org.ninthfloor.bj21.gson.Hand;
+import org.ninthfloor.bj21.gson.Player;
 import org.ninthfloor.bj21.gson.Table;
 
 import java.util.ArrayList;
@@ -37,9 +41,17 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class UpdateTableTest
+public class UpdateHandTest
 {
-    private UpdateTable updateTable;
+    private UpdateHand updateHand;
+
+    private Hand hand;
+
+    private Hands hands;
+
+    private Player player;
+
+    private Players players;
 
     private Table table;
 
@@ -61,7 +73,9 @@ public class UpdateTableTest
     public void init()
     {
         ddb = DynamoDBEmbedded.create().amazonDynamoDB();
-        updateTable = new UpdateTable(ddb);
+        updateHand = new UpdateHand(ddb);
+        hand = new Hand();
+        player = new Player();
         table = new Table();
         request = new APIGatewayProxyRequestEvent();
         gson = gsonBuilder.create();
@@ -79,35 +93,111 @@ public class UpdateTableTest
         ProvisionedThroughput throughput =
             new ProvisionedThroughput(1000L, 1000L);
 
-        String tableName = "Tables";
-        // The environment variable is probably empty, so override it.
-        updateTable.TABLES_TABLE_NAME = tableName;
-        CreateTableResult res =
-            createTable(ddb, tableName, attrs, ks, throughput);
+        String tableName;
 
+        tableName = "Hands";
+        updateHand.HANDS_TABLE_NAME = tableName;
+        CreateTableResult res0 =
+            createTable(ddb, tableName, attrs, ks, throughput);
+        hands = new Hands(tableName, ddb, gson);
+
+        tableName = "Players";
+        updateHand.PLAYERS_TABLE_NAME = tableName;
+        CreateTableResult res1 =
+            createTable(ddb, tableName, attrs, ks, throughput);
+        players = new Players(tableName, ddb, gson);
+
+        tableName = "Tables";
+        updateHand.TABLES_TABLE_NAME = tableName;
+        CreateTableResult res2 =
+            createTable(ddb, tableName, attrs, ks, throughput);
         tables = new Tables(tableName, ddb, gson);
     }
 
     @Test
     public void testHandleRequestFailure1()
     {
-        Map<String,String> headers = new HashMap<>();
         Map<String,String> pathParameters = new HashMap<>();
-        Map<String,String> queryStringParameters = new HashMap<>();
-        request.setHttpMethod("");
-        request.setResource("");
-        request.setPath("");
+        pathParameters.put("tableId", "0");
+        pathParameters.put("seatId", "0");
+        pathParameters.put("handId", "0");
+        request.setHttpMethod("PUT");
         request.setPathParameters(pathParameters);
-        request.setQueryStringParameters(queryStringParameters);
-        request.setHeaders(headers);
-        request.setBody("");
         APIGatewayProxyResponseEvent response =
-            updateTable.handleRequest(request, context);
+            updateHand.handleRequest(request, context);
+        assertEquals("application/json",
+                     response.getHeaders().get("Content-Type"));
+        assertNull(response.getHeaders().get("Location"));
+        assertEquals(Integer.valueOf(404), response.getStatusCode());
+        assertEquals("{\"message\":\"Not found\",\"file\":\"PUT /v0/tables/0\"}",
+                     response.getBody());
+    }
+
+    @Test
+    public void testHandleRequestFailure2()
+    {
+        Map<String,String> pathParameters = new HashMap<>();
+        pathParameters.put("tableId", "0");
+        pathParameters.put("seatId", "0");
+        pathParameters.put("handId", "0");
+        request.setHttpMethod("PUT");
+        request.setPathParameters(pathParameters);
+        table.setId(0L);
+        tables.add(table);
+        APIGatewayProxyResponseEvent response =
+            updateHand.handleRequest(request, context);
+        assertEquals("application/json",
+                     response.getHeaders().get("Content-Type"));
+        assertNull(response.getHeaders().get("Location"));
+        assertEquals(Integer.valueOf(404), response.getStatusCode());
+        assertEquals("{\"message\":\"Not found\",\"file\":\"PUT /v0/tables/0/players/0\"}",
+                     response.getBody());
+    }
+
+    @Test
+    public void testHandleRequestFailure3()
+    {
+        Map<String,String> pathParameters = new HashMap<>();
+        pathParameters.put("tableId", "0");
+        pathParameters.put("seatId", "0");
+        pathParameters.put("handId", "0");
+        request.setHttpMethod("PUT");
+        request.setPathParameters(pathParameters);
+        table.setId(0L);
+        tables.add(table);
+        player.setId(0L);
+        players.add(player);
+        APIGatewayProxyResponseEvent response =
+            updateHand.handleRequest(request, context);
         assertEquals("application/json",
                      response.getHeaders().get("Content-Type"));
         assertNull(response.getHeaders().get("Location"));
         assertEquals(Integer.valueOf(405), response.getStatusCode());
-        assertEquals("{\"message\":\"Invalid input\",\"file\":\" \"}",
+        assertEquals("{\"message\":\"Invalid input\",\"file\":\"HTTP-body\"}",
+                     response.getBody());
+    }
+
+    @Test
+    public void testHandleRequestFailure4()
+    {
+        Map<String,String> pathParameters = new HashMap<>();
+        pathParameters.put("tableId", "0");
+        pathParameters.put("seatId", "0");
+        table.setId(0L);
+        tables.add(table);
+        player.setId(0L);
+        players.add(player);
+        hand.setId(0L);
+        request.setHttpMethod("PUT");
+        request.setPathParameters(pathParameters);
+        request.setBody(gson.toJson(hand));
+        APIGatewayProxyResponseEvent response =
+            updateHand.handleRequest(request, context);
+        assertEquals("application/json",
+                     response.getHeaders().get("Content-Type"));
+        assertNull(response.getHeaders().get("Location"));
+        assertEquals(Integer.valueOf(405), response.getStatusCode());
+        assertEquals("{\"message\":\"Invalid input\",\"file\":\"PUT /v0/tables/0/players/0/hands/\"}",
                      response.getBody());
     }
 
@@ -120,72 +210,55 @@ public class UpdateTableTest
         headers.put("Accept",
                     "application/json");
         pathParameters.put("tableId", "0");
+        pathParameters.put("seatId", "0");
+        pathParameters.put("handId", "0");
         request.setHttpMethod("PUT");
-        request.setResource("");
-        request.setPath("/v0/tables/0");
+        request.setResource("/v0/tables/0/players/0/hands");
+        request.setPath("");
         request.setPathParameters(pathParameters);
         request.setQueryStringParameters(queryStringParameters);
         request.setHeaders(headers);
         table.setId(0L);
-        table.setDecks(1L);
         tables.add(table);
-        table.setDecks(2L); // !
-        request.setBody(gson.toJson(table));
+        player.setId(0L);
+        players.add(player);
+        hand.setId(0L);
+        request.setBody(gson.toJson(hand));
         APIGatewayProxyResponseEvent response =
-            updateTable.handleRequest(request, context);
+            updateHand.handleRequest(request, context);
         assertEquals("application/json",
                      response.getHeaders().get("Content-Type"));
         assertEquals(Integer.valueOf(200), response.getStatusCode());
-        assertEquals("{\"id\":0,\"decks\":2}",
-                     response.getBody());
+        assertEquals(gson.toJson(hand), response.getBody());
     }
 
     @Test
-    public void testHandleRequestFailure2()
+    public void testHandleRequestSuccess2()
     {
         Map<String,String> headers = new HashMap<>();
         Map<String,String> pathParameters = new HashMap<>();
         Map<String,String> queryStringParameters = new HashMap<>();
-        pathParameters.put("tableId", "");
+        pathParameters.put("tableId", "0");
+        pathParameters.put("seatId", "0");
+        pathParameters.put("handId", "0");
         request.setHttpMethod("");
         request.setResource("");
         request.setPath("");
         request.setPathParameters(pathParameters);
         request.setQueryStringParameters(queryStringParameters);
         request.setHeaders(headers);
+        table.setId(0L);
+        tables.add(table);
+        player.setId(0L);
+        players.add(player);
+        hand.setId(0L);
+        request.setBody(gson.toJson(hand));
         APIGatewayProxyResponseEvent response =
-            updateTable.handleRequest(request, context);
+            updateHand.handleRequest(request, context);
         assertEquals("application/json",
                      response.getHeaders().get("Content-Type"));
-        assertEquals(Integer.valueOf(405), response.getStatusCode());
-        assertNull(response.getHeaders().get("Location"));
-        assertEquals("{\"message\":\"Invalid input\",\"file\":\" \"}",
-                     response.getBody());
-    }
-
-    @Test
-    public void testHandleRequestFailure3()
-    {
-        Map<String,String> headers = new HashMap<>();
-        Map<String,String> pathParameters = new HashMap<>();
-        Map<String,String> queryStringParameters = new HashMap<>();
-        pathParameters.put("tableId", "1");
-        request.setHttpMethod("");
-        request.setResource("");
-        request.setPath("");
-        request.setPathParameters(pathParameters);
-        request.setQueryStringParameters(queryStringParameters);
-        request.setHeaders(headers);
-        table.setId(2L); // !
-        request.setBody(gson.toJson(table));
-        APIGatewayProxyResponseEvent response =
-            updateTable.handleRequest(request, context);
-        assertEquals("application/json",
-                     response.getHeaders().get("Content-Type"));
-        assertEquals(Integer.valueOf(405), response.getStatusCode());
-        assertNull(response.getHeaders().get("Location"));
-        assertEquals("{\"message\":\"Invalid input\",\"file\":\"HTTP-body\"}",
-                     response.getBody());
+        assertEquals(Integer.valueOf(200), response.getStatusCode());
+        assertEquals(gson.toJson(hand), response.getBody());
     }
 
     private CreateTableResult createTable(

@@ -30,7 +30,7 @@ public class AddTable
     final private GsonBuilder gsonBuilder =
         new GsonBuilder();
 
-    private Gson gson =
+    final private Gson gson =
         gsonBuilder.create();
 
     // This field is mutable and is public.
@@ -70,6 +70,7 @@ public class AddTable
         logger.info("HTTP method: {}", request.getHttpMethod());
         logger.info("Resource path: {}", request.getResource());
         logger.info("Request path: {}", request.getPath());
+        logger.info("Path parameters: {}", request.getPathParameters());
         logger.info("Request query: {}", request.getQueryStringParameters());
         if (request.getHeaders() == null) {
             logger.info("Request headers: {}",

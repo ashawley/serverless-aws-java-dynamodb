@@ -41,7 +41,8 @@ public class TablesTest {
 
     private DynamoDB ddbDoc;
 
-    final private GsonBuilder gsonBuilder = new GsonBuilder();
+    final private GsonBuilder gsonBuilder =
+        new GsonBuilder();
 
     private Gson gson;
 
