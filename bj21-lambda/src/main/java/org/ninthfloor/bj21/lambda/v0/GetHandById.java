@@ -25,7 +25,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import com.github.jknack.handlebars.Handlebars;
-import com.github.jknack.handlebars.Template;
 
 import org.apache.commons.lang3.StringUtils;
 

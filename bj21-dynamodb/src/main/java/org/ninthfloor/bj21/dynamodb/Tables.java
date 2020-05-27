@@ -10,13 +10,10 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
-import com.amazonaws.services.dynamodbv2.document.spec.UpdateItemSpec;
 
 public class Tables {
 
     private String tablesTableName;
-
-    private AmazonDynamoDB client;
 
     private DynamoDB ddb;
 
@@ -26,7 +23,6 @@ public class Tables {
 
     public Tables(String tablesTableName, AmazonDynamoDB client, Gson gson) {
         this.tablesTableName = tablesTableName;
-        this.client = client;
         this.ddb = new DynamoDB(client);
         DynamoDBMapperConfig mapperConfig =
             DynamoDBMapperConfig.builder()

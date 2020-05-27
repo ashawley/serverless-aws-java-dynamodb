@@ -32,7 +32,6 @@ import org.junit.runner.RunWith;
 import org.junit.Test;
 
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
