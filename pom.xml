@@ -58,9 +58,9 @@
       </plugin>
 
       <plugin>
-	<groupId>org.codehaus.mojo</groupId>
-	<artifactId>versions-maven-plugin</artifactId>
-	<version>2.7</version>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>versions-maven-plugin</artifactId>
+        <version>2.7</version>
       </plugin>
 
       <plugin>
@@ -83,12 +83,24 @@
         <version>3.2.1-SNAPSHOT</version>
         <executions>
           <execution>
-            <id>attach-javadocs</id>
+            <phase>package</phase>
             <goals>
+              <goal>aggregate-no-fork</goal>
               <goal>jar</goal>
             </goals>
           </execution>
         </executions>
+        <configuration>
+          <encoding>UTF-8</encoding>
+          <links>
+            <link>http://docs.swagger.io/swagger-core/v1.5.X/apidocs/</link>
+            <link>https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/</link>
+            <link>https://javadoc.io/doc/com.amazonaws/aws-lambda-java-core/1.2.0/</link>
+            <link>https://javadoc.io/doc/com.amazonaws/aws-lambda-java-events/2.2.8/</link>
+            <link>https://javadoc.io/doc/com.github.jknack/handlebars/4.2.0/</link>
+            <link>https://www.javadoc.io/doc/com.google.code.gson/gson/2.8.5/</link>
+          </links>
+        </configuration>
       </plugin>
 
       <plugin>
