@@ -113,20 +113,20 @@ public class DeleteTable
             response.setHeaders(headers);
             response.setBody(gson.toJson(table.get()));
             return response;
-        } else {
-            logger.error("Responding with a 404 error");
-            Error error = new Error();
-            error.setMessage("Not found");
-            error.setFile(request.getHttpMethod() + " " + request.getPath());
-            Map<String,String> headers = new HashMap<>();
-            headers.put("Content-Type",
-                        "application/json");
-            APIGatewayProxyResponseEvent response =
-                new APIGatewayProxyResponseEvent();
-            response.setStatusCode(404);
-            response.setHeaders(headers);
-            response.setBody(gson.toJson(error));
-            return response;
-        }
+        } // else
+
+        logger.error("Responding with a 404 error");
+        Error error = new Error();
+        error.setMessage("Not found");
+        error.setFile(request.getHttpMethod() + " " + request.getPath());
+        Map<String,String> headers = new HashMap<>();
+        headers.put("Content-Type",
+                    "application/json");
+        APIGatewayProxyResponseEvent response =
+            new APIGatewayProxyResponseEvent();
+        response.setStatusCode(404);
+        response.setHeaders(headers);
+        response.setBody(gson.toJson(error));
+        return response;
     }
 }

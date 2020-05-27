@@ -211,8 +211,8 @@ public class GetHandByIdTest
         pathParameters.put("seatId", "0");
         pathParameters.put("handId", "0");
         request.setHttpMethod("GET");
-        request.setResource("/v0/tables/0/players/0/hands");
-        request.setPath("");
+        request.setResource("/v0/tables/{tableId}/players/{seatId}/hands/{handId}");
+        request.setPath("/v0/tables/0/players/0/hands/0");
         request.setPathParameters(pathParameters);
         request.setQueryStringParameters(queryStringParameters);
         request.setHeaders(headers);

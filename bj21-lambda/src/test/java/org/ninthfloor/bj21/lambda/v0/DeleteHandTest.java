@@ -41,9 +41,9 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class UpdateHandTest
+public class DeleteHandTest
 {
-    private UpdateHand updateHand;
+    private DeleteHand deleteHand;
 
     private Hand hand;
 
@@ -73,7 +73,7 @@ public class UpdateHandTest
     public void init()
     {
         ddb = DynamoDBEmbedded.create().amazonDynamoDB();
-        updateHand = new UpdateHand(ddb);
+        deleteHand = new DeleteHand(ddb);
         hand = new Hand();
         player = new Player();
         table = new Table();
@@ -96,19 +96,19 @@ public class UpdateHandTest
         String tableName;
 
         tableName = "Hands";
-        updateHand.HANDS_TABLE_NAME = tableName;
+        deleteHand.HANDS_TABLE_NAME = tableName;
         CreateTableResult res0 =
             createTable(ddb, tableName, attrs, ks, throughput);
         hands = new Hands(tableName, ddb, gson);
 
         tableName = "Players";
-        updateHand.PLAYERS_TABLE_NAME = tableName;
+        deleteHand.PLAYERS_TABLE_NAME = tableName;
         CreateTableResult res1 =
             createTable(ddb, tableName, attrs, ks, throughput);
         players = new Players(tableName, ddb, gson);
 
         tableName = "Tables";
-        updateHand.TABLES_TABLE_NAME = tableName;
+        deleteHand.TABLES_TABLE_NAME = tableName;
         CreateTableResult res2 =
             createTable(ddb, tableName, attrs, ks, throughput);
         tables = new Tables(tableName, ddb, gson);
@@ -121,15 +121,15 @@ public class UpdateHandTest
         pathParameters.put("tableId", "0");
         pathParameters.put("seatId", "0");
         pathParameters.put("handId", "0");
-        request.setHttpMethod("PUT");
+        request.setHttpMethod("DELETE");
         request.setPathParameters(pathParameters);
         APIGatewayProxyResponseEvent response =
-            updateHand.handleRequest(request, context);
+            deleteHand.handleRequest(request, context);
         assertEquals("application/json",
                      response.getHeaders().get("Content-Type"));
         assertNull(response.getHeaders().get("Location"));
         assertEquals(Integer.valueOf(404), response.getStatusCode());
-        assertEquals("{\"message\":\"Not found\",\"file\":\"PUT /v0/tables/0\"}",
+        assertEquals("{\"message\":\"Not found\",\"file\":\"DELETE /v0/tables/0\"}",
                      response.getBody());
     }
 
@@ -140,17 +140,17 @@ public class UpdateHandTest
         pathParameters.put("tableId", "0");
         pathParameters.put("seatId", "0");
         pathParameters.put("handId", "0");
-        request.setHttpMethod("PUT");
+        request.setHttpMethod("DELETE");
         request.setPathParameters(pathParameters);
         table.setId(0L);
         tables.add(table);
         APIGatewayProxyResponseEvent response =
-            updateHand.handleRequest(request, context);
+            deleteHand.handleRequest(request, context);
         assertEquals("application/json",
                      response.getHeaders().get("Content-Type"));
         assertNull(response.getHeaders().get("Location"));
         assertEquals(Integer.valueOf(404), response.getStatusCode());
-        assertEquals("{\"message\":\"Not found\",\"file\":\"PUT /v0/tables/0/players/0\"}",
+        assertEquals("{\"message\":\"Not found\",\"file\":\"DELETE /v0/tables/0/players/0\"}",
                      response.getBody());
     }
 
@@ -161,19 +161,19 @@ public class UpdateHandTest
         pathParameters.put("tableId", "0");
         pathParameters.put("seatId", "0");
         pathParameters.put("handId", "0");
-        request.setHttpMethod("PUT");
+        request.setHttpMethod("DELETE");
         request.setPathParameters(pathParameters);
         table.setId(0L);
         tables.add(table);
         player.setId(0L);
         players.add(player);
         APIGatewayProxyResponseEvent response =
-            updateHand.handleRequest(request, context);
+            deleteHand.handleRequest(request, context);
         assertEquals("application/json",
                      response.getHeaders().get("Content-Type"));
         assertNull(response.getHeaders().get("Location"));
-        assertEquals(Integer.valueOf(405), response.getStatusCode());
-        assertEquals("{\"message\":\"Invalid input\",\"file\":\"HTTP-body\"}",
+        assertEquals(Integer.valueOf(404), response.getStatusCode());
+        assertEquals("{\"message\":\"Not found\",\"file\":\"DELETE /v0/tables/0/players/0/hands/0\"}",
                      response.getBody());
     }
 
@@ -183,21 +183,19 @@ public class UpdateHandTest
         Map<String,String> pathParameters = new HashMap<>();
         pathParameters.put("tableId", "0");
         pathParameters.put("seatId", "0");
+        request.setHttpMethod("DELETE");
+        request.setPathParameters(pathParameters);
         table.setId(0L);
         tables.add(table);
         player.setId(0L);
         players.add(player);
-        hand.setId(0L);
-        request.setHttpMethod("PUT");
-        request.setPathParameters(pathParameters);
-        request.setBody(gson.toJson(hand));
         APIGatewayProxyResponseEvent response =
-            updateHand.handleRequest(request, context);
+            deleteHand.handleRequest(request, context);
         assertEquals("application/json",
                      response.getHeaders().get("Content-Type"));
         assertNull(response.getHeaders().get("Location"));
         assertEquals(Integer.valueOf(405), response.getStatusCode());
-        assertEquals("{\"message\":\"Invalid input\",\"file\":\"PUT /v0/tables/0/players/0/hands/\"}",
+        assertEquals("{\"message\":\"Invalid input\",\"file\":\"DELETE /v0/tables/0/players/0/hands/\"}",
                      response.getBody());
     }
 
@@ -212,7 +210,7 @@ public class UpdateHandTest
         pathParameters.put("tableId", "0");
         pathParameters.put("seatId", "0");
         pathParameters.put("handId", "0");
-        request.setHttpMethod("PUT");
+        request.setHttpMethod("DELETE");
         request.setResource("/v0/tables/{tableId}/players/{seatId}/hands/{handId}");
         request.setPath("/v0/tables/0/players/0/hands/0");
         request.setPathParameters(pathParameters);
@@ -223,9 +221,9 @@ public class UpdateHandTest
         player.setId(0L);
         players.add(player);
         hand.setId(0L);
-        request.setBody(gson.toJson(hand));
+        hands.add(hand);
         APIGatewayProxyResponseEvent response =
-            updateHand.handleRequest(request, context);
+            deleteHand.handleRequest(request, context);
         assertEquals("application/json",
                      response.getHeaders().get("Content-Type"));
         assertEquals(Integer.valueOf(200), response.getStatusCode());
@@ -252,9 +250,10 @@ public class UpdateHandTest
         player.setId(0L);
         players.add(player);
         hand.setId(0L);
-        request.setBody(gson.toJson(hand));
+        hands.add(hand);
+        request.setBody("");
         APIGatewayProxyResponseEvent response =
-            updateHand.handleRequest(request, context);
+            deleteHand.handleRequest(request, context);
         assertEquals("application/json",
                      response.getHeaders().get("Content-Type"));
         assertEquals(Integer.valueOf(200), response.getStatusCode());

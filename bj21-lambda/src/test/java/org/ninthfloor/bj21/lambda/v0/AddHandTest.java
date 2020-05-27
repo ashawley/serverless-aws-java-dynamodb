@@ -210,8 +210,8 @@ public class AddHandTest
         pathParameters.put("tableId", "0");
         pathParameters.put("seatId", "0");
         request.setHttpMethod("POST");
-        request.setResource("/v0/tables/0/players/0/hands");
-        request.setPath("");
+        request.setResource("/v0/tables/{tableId}/players/{seatId}/hands/");
+        request.setPath("/v0/tables/0/players/0/hands");
         request.setPathParameters(pathParameters);
         request.setQueryStringParameters(queryStringParameters);
         request.setHeaders(headers);

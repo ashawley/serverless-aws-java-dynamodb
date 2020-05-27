@@ -121,7 +121,7 @@ public class GetTableByIdTest
                     "application/json");
         pathParameters.put("tableId", "0");
         request.setHttpMethod("GET");
-        request.setResource("");
+        request.setResource("/v0/tables/{tableId}");
         request.setPath("/v0/tables/0");
         request.setPathParameters(pathParameters);
         request.setQueryStringParameters(queryStringParameters);

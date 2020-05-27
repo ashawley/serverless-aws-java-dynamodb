@@ -121,7 +121,7 @@ public class AddTableTest
                     "application/json");
         request.setHttpMethod("POST");
         request.setResource("/v0/tables");
-        request.setPath("");
+        request.setPath("/v0/tables");
         request.setQueryStringParameters(queryStringParameters);
         request.setHeaders(headers);
         table.setId(0L);

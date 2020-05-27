@@ -32,7 +32,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class UpdateHand
+public class DeleteHand
     implements RequestHandler<APIGatewayProxyRequestEvent,
                               APIGatewayProxyResponseEvent>
 {
@@ -58,7 +58,7 @@ public class UpdateHand
         System.getenv("TABLES_TABLE_NAME");
 
     private final static Logger logger =
-        LoggerFactory.getLogger(UpdateHand.class);
+        LoggerFactory.getLogger(DeleteHand.class);
 
     /**
      * Constructor for test suite.
@@ -67,7 +67,7 @@ public class UpdateHand
      *
      * @param   ddb     AmazonDynamoDB
      */
-    public UpdateHand(AmazonDynamoDB ddb) {
+    public DeleteHand(AmazonDynamoDB ddb) {
         this.ddb = ddb;
     }
 
@@ -77,7 +77,7 @@ public class UpdateHand
      * This is not called by the test suite.
      * This will auto-configure the {@link AmazonDynamoDB} connection.
      */
-    public UpdateHand() {
+    public DeleteHand() {
         this(AmazonDynamoDBClientBuilder.standard().build());
     }
 
@@ -146,7 +146,6 @@ public class UpdateHand
             logger.info("Accept header: {}",
                         request.getHeaders().get("Accept"));
         }
-        logger.info("Request body: {}", request.getBody());
 
         String tableIdParam = request.getPathParameters().get("tableId");
         if (!StringUtils.isNumeric(tableIdParam)) {
@@ -257,42 +256,29 @@ public class UpdateHand
             return response;
         } // else
 
-        Long handId = Long.valueOf(handIdParam);
-        Hand hand = gson.fromJson(request.getBody(), Hand.class);
-
-        if (hand == null) {
-            logger.error("Failed to deserialize JSON in request body");
+        Long handId = Long.valueOf(request.getPathParameters().get("handId"));
+        Hands hands = new Hands(HANDS_TABLE_NAME, ddb, gson);
+        Optional<Hand> hand = hands.getById(handId);
+        /* Optional<Hand> hand = */ hands.remove(handId);
+        if (!hand.isPresent()) {
+            logger.error("Responding with a 404 error");
             Error error = new Error();
-            error.setMessage("Invalid input");
-            error.setFile("HTTP-body");
+            error.setMessage("Not found");
+            String path =
+                format(handlebars,
+                       "/v0/tables/{{tableId}}/players/{{seatId}}/hands/{{handId}}",
+                       request.getPathParameters());
+            error.setFile(request.getHttpMethod() + " " + path);
             Map<String,String> headers = new HashMap<>();
             headers.put("Content-Type",
                         "application/json");
             APIGatewayProxyResponseEvent response =
                 new APIGatewayProxyResponseEvent();
-            response.setStatusCode(405);
-            response.setHeaders(headers);
-            response.setBody(gson.toJson(error));
-            return response;
-        } else if (hand.getId() != null && hand.getId() != handId) {
-            logger.error("The id field in JSON didn't match the path");
-            Error error = new Error();
-            error.setMessage("Invalid input");
-            error.setFile("HTTP-body");
-            Map<String,String> headers = new HashMap<>();
-            headers.put("Content-Type",
-                        "application/json");
-            APIGatewayProxyResponseEvent response =
-                new APIGatewayProxyResponseEvent();
-            response.setStatusCode(405);
+            response.setStatusCode(404);
             response.setHeaders(headers);
             response.setBody(gson.toJson(error));
             return response;
         } // else
-
-        hand.setId(handId);
-        Hands hands = new Hands(HANDS_TABLE_NAME, ddb, gson);
-        hands.update(hand);
 
         logger.info("Responding with a 200 error");
         Map<String,String> headers = new HashMap<>();
@@ -300,9 +286,9 @@ public class UpdateHand
                     "application/json");
         APIGatewayProxyResponseEvent response =
             new APIGatewayProxyResponseEvent();
-        response.setStatusCode(200); // FIXME: 201 if created
+        response.setStatusCode(200);
         response.setHeaders(headers);
-        response.setBody(gson.toJson(hand));
+        response.setBody(gson.toJson(hand.get()));
         return response;
     }
 }
