@@ -3,7 +3,7 @@ Blackjack API
 
 An implementation of Blackjack using Java and Serverless Framework.
 
-1. About 3,000 sloc of Java.
+1. About 3,500 sloc of Java.
 1. About 1,500 sloc of YAML.
 1. About 500 sloc of Maven POM.
 
@@ -54,6 +54,14 @@ You can run an integration test of a AWS Lambda function:
 
     $ mvn test -Dmdep.skip  -Dmaven.source.skip -DfailIfNoTests=false \
                -Dtest=org.ninthfloor.bj21.lambda.v0.AddTableTest -pl :bj21-lambda -am
+
+Build the api docs for all the modules:
+
+    $ mvn javadoc:aggregate
+
+Build the source references for all the modules:
+
+    $ mvn jxr:aggregate
 
 To update dependencies to the next version::
 
