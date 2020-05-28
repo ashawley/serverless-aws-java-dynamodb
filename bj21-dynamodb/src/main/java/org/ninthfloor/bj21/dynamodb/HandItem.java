@@ -15,7 +15,7 @@ public class HandItem {
     private Long id;
     private Long playerId;
     private Long prev;
-    private List<Card> cards;
+    private List<CardDocument> cards;
     private List<String> actions;
     private Long initial;
     private Long bet;
@@ -26,7 +26,7 @@ public class HandItem {
         handItem.setKey("version0");
         handItem.setId(hand.getId());
         handItem.setPrev(hand.getPrev());
-        handItem.setCards(Card.fromGSON(hand.getCards()));
+        handItem.setCards(CardDocument.fromGSON(hand.getCards()));
         handItem.setActions(hand.getActions().stream()
             .map((org.ninthfloor.bj21.gson.Hand.ActionsEnum action)
                  -> action.getValue()
@@ -56,8 +56,8 @@ public class HandItem {
     public void setPlayerId(Long playerId) { this.playerId = playerId; }
 
     @DynamoDBAttribute(attributeName="cards")
-    public List<Card> getCards() { return cards; }
-    public void setCards(List<Card> cards) { this.cards = cards; }
+    public List<CardDocument> getCards() { return cards; }
+    public void setCards(List<CardDocument> cards) { this.cards = cards; }
 
     @DynamoDBAttribute(attributeName="actions")
     public List<String> getActions() { return actions; }
