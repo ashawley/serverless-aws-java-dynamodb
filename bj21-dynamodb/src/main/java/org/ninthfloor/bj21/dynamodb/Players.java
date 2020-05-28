@@ -2,6 +2,8 @@ package org.ninthfloor.bj21.dynamodb;
 
 import java.util.Optional;
 
+import org.ninthfloor.bj21.gson.Player;
+
 import com.google.gson.Gson;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
@@ -32,14 +34,14 @@ public class Players {
         this.gson = gson;
     }
 
-    public PutItemOutcome add(org.ninthfloor.bj21.gson.Player player) {
+    public PutItemOutcome add(Player player) {
         String json = gson.toJson(player);
         Item item = Item.fromJSON(json).withPrimaryKey("key", "version0");
         return ddb.getTable(playersTableName).putItem(item);
     }
 
-    public org.ninthfloor.bj21.gson.Player toJSON(Item item) {
-        return gson.fromJson(item.toJSON(), org.ninthfloor.bj21.gson.Player.class);
+    public Player toJSON(Item item) {
+        return gson.fromJson(item.toJSON(), Player.class);
     }
 
     public Optional<Item> getItem(Long id) {
@@ -48,24 +50,26 @@ public class Players {
         );
     }
 
-    public Optional<org.ninthfloor.bj21.gson.Player> getById(Long id) {
+    public Optional<Player> getById(Long id) {
         return getItem(id).map(this::toJSON);
     }
 
-    public PlayerItem load(String key, Long id) {
-        return mapper.load(PlayerItem.class, key, id);
+    public Optional<PlayerItem> load(Long id) {
+        return Optional.ofNullable(
+            mapper.load(PlayerItem.class, "version0", id)
+        );
     }
 
     public void update(PlayerItem item) {
         mapper.save(item);
     }
 
-    public void update(org.ninthfloor.bj21.gson.Player player) {
+    public void update(Player player) {
         // mapper.load(PlayerItem.class, "version0", player.getId());
         mapper.save(PlayerItem.fromGSON(player));
     }
 
-    public Optional<org.ninthfloor.bj21.gson.Player> remove(Long id) {
+    public Optional<Player> remove(Long id) {
         return Optional.ofNullable(
             ddb.getTable(playersTableName)
                .deleteItem("key", "version0", "id", id)
@@ -73,7 +77,7 @@ public class Players {
         ).map(this::toJSON);
     }
 
-    public void remove(org.ninthfloor.bj21.gson.Player player) {
+    public void remove(Player player) {
         mapper.delete(PlayerItem.fromGSON(player));
     }
 }

@@ -2,6 +2,8 @@ package org.ninthfloor.bj21.dynamodb;
 
 import java.util.Optional;
 
+import org.ninthfloor.bj21.gson.Hand;
+
 import com.google.gson.Gson;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
@@ -10,6 +12,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
+
 public class Hands {
 
     private String handsTableName;
@@ -31,14 +34,14 @@ public class Hands {
         this.gson = gson;
     }
 
-    public PutItemOutcome add(org.ninthfloor.bj21.gson.Hand hand) {
+    public PutItemOutcome add(Hand hand) {
         String json = gson.toJson(hand);
         Item item = Item.fromJSON(json).withPrimaryKey("key", "version0");
         return ddb.getTable(handsTableName).putItem(item);
     }
 
-    public org.ninthfloor.bj21.gson.Hand toJSON(Item item) {
-        return gson.fromJson(item.toJSON(), org.ninthfloor.bj21.gson.Hand.class);
+    public Hand toJSON(Item item) {
+        return gson.fromJson(item.toJSON(), Hand.class);
     }
 
     public Optional<Item> getItem(Long id) {
@@ -47,24 +50,27 @@ public class Hands {
         );
     }
 
-    public Optional<org.ninthfloor.bj21.gson.Hand> getById(Long id) {
+    public Optional<Hand> getById(Long id) {
         return getItem(id).map(this::toJSON);
     }
 
-    public HandItem load(String key, Long id) {
-        return mapper.load(HandItem.class, key, id);
+    public Optional<HandItem> load(Long id) {
+        return Optional.ofNullable(
+            mapper.load(HandItem.class, "version0", id)
+        );
     }
 
     public void update(HandItem item) {
         mapper.save(item);
     }
 
-    public void update(org.ninthfloor.bj21.gson.Hand hand) {
-        // mapper.load(HandItem.class, "version0", hand.getId());
+    public HandItem update(Hand hand) {
+        HandItem handItem = HandItem.fromGSON(hand);
         mapper.save(HandItem.fromGSON(hand));
+        return handItem;
     }
 
-    public Optional<org.ninthfloor.bj21.gson.Hand> remove(Long id) {
+    public Optional<Hand> remove(Long id) {
         return Optional.ofNullable(
             ddb.getTable(handsTableName)
                .deleteItem("key", "version0", "id", id)
@@ -72,7 +78,7 @@ public class Hands {
         ).map(this::toJSON);
     }
 
-    public void remove(org.ninthfloor.bj21.gson.Hand hand) {
+    public void remove(Hand hand) {
         mapper.delete(HandItem.fromGSON(hand));
     }
 }

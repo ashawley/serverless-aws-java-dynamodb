@@ -132,7 +132,7 @@ public class GetTableByIdTest
         assertEquals("application/json",
                      response.getHeaders().get("Content-Type"));
         assertEquals(Integer.valueOf(200), response.getStatusCode());
-        assertEquals("{\"id\":0}",
+        assertEquals(gson.toJson(table),
                      response.getBody());
     }
 

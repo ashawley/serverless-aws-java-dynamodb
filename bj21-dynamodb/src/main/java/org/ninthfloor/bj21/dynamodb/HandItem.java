@@ -3,6 +3,8 @@ package org.ninthfloor.bj21.dynamodb;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.ninthfloor.bj21.gson.Hand;
+
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
@@ -21,14 +23,14 @@ public class HandItem {
     private Long bet;
     private Long total;
 
-    protected static HandItem fromGSON(org.ninthfloor.bj21.gson.Hand hand) {
+    protected static HandItem fromGSON(Hand hand) {
         HandItem handItem = new HandItem();
         handItem.setKey("version0");
         handItem.setId(hand.getId());
         handItem.setPrev(hand.getPrev());
         handItem.setCards(CardDocument.fromGSON(hand.getCards()));
         handItem.setActions(hand.getActions().stream()
-            .map((org.ninthfloor.bj21.gson.Hand.ActionsEnum action)
+            .map((Hand.ActionsEnum action)
                  -> action.getValue()
             )
             .collect(Collectors.toList())
@@ -37,6 +39,24 @@ public class HandItem {
         handItem.setBet(hand.getBet());
         handItem.setTotal(hand.getTotal());
         return handItem;
+    }
+
+    public Hand toGSON() {
+        Hand hand = new Hand();
+        hand.setId(getId());
+        hand.setPrev(getPrev());
+        hand.setCards(getCards().stream()
+            .map(CardDocument::toGSON)
+            .collect(Collectors.toList())
+        );
+        hand.setActions(getActions().stream()
+            .map(Hand.ActionsEnum::fromValue)
+            .collect(Collectors.toList())
+        );
+        hand.setInitial(getInitial());
+        hand.setBet(getBet());
+        hand.setTotal(getTotal());
+        return hand;
     }
 
     @DynamoDBHashKey(attributeName="key")

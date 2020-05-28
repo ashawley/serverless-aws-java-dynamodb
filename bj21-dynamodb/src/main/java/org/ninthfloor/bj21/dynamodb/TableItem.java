@@ -1,5 +1,7 @@
 package org.ninthfloor.bj21.dynamodb;
 
+import org.ninthfloor.bj21.gson.Table;
+
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
@@ -17,7 +19,7 @@ public class TableItem {
     private Long maximum;
     private Long rounds;
 
-    protected static TableItem fromGSON(org.ninthfloor.bj21.gson.Table table) {
+    protected static TableItem fromGSON(Table table) {
         TableItem tableItem = new TableItem();
         tableItem.setKey("version0");
         tableItem.setId(table.getId());
@@ -28,6 +30,18 @@ public class TableItem {
         tableItem.setMaximum(table.getMaximum());
         tableItem.setRounds(table.getRounds());
         return tableItem;
+    }
+
+    public Table toGSON() {
+        Table table = new Table();
+        table.setId(getId());
+        table.setDecks(getDecks());
+        table.setSeats(getSeats());
+        table.setPlayers(getPlayers());
+        table.setMinimum(getMinimum());
+        table.setMaximum(getMaximum());
+        table.setRounds(getRounds());
+        return table;
     }
 
     @DynamoDBHashKey(attributeName="key")

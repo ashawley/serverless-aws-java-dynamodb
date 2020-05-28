@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import org.ninthfloor.bj21.dynamodb.HandItem;
 import org.ninthfloor.bj21.dynamodb.Hands;
 import org.ninthfloor.bj21.dynamodb.Players;
 import org.ninthfloor.bj21.dynamodb.Tables;
@@ -291,7 +292,9 @@ public class UpdateHand
 
         hand.setId(handId);
         Hands hands = new Hands(HANDS_TABLE_NAME, ddb, gson);
-        hands.update(hand);
+        HandItem handItem = hands.update(hand);
+        handItem.setPlayerId(player.get().getId());
+        hands.update(handItem);
 
         logger.info("Responding with a 200 error");
         Map<String,String> headers = new HashMap<>();
@@ -301,7 +304,7 @@ public class UpdateHand
             new APIGatewayProxyResponseEvent();
         response.setStatusCode(200); // FIXME: 201 if created
         response.setHeaders(headers);
-        response.setBody(gson.toJson(hand));
+        response.setBody(gson.toJson(handItem.toGSON()));
         return response;
     }
 }

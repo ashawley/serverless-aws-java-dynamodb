@@ -2,6 +2,9 @@ package org.ninthfloor.bj21.dynamodb;
 
 import java.util.Optional;
 
+import org.ninthfloor.bj21.gson.Hands;
+import org.ninthfloor.bj21.gson.Player;
+
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
@@ -16,14 +19,14 @@ public class PlayerItem {
     private Long chips;
     private Long bet;
 
-    protected static PlayerItem fromGSON(org.ninthfloor.bj21.gson.Player player) {
+    protected static PlayerItem fromGSON(Player player) {
         PlayerItem playerItem = new PlayerItem();
         playerItem.setKey("version0");
         playerItem.setId(player.getId());
         playerItem.setChips(player.getChips());
         playerItem.setBet(
             Optional.ofNullable(player.getHand())
-                .map(org.ninthfloor.bj21.gson.Hands::getBet)
+                .map(Hands::getBet)
                 .get()
         );
         return playerItem;

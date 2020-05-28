@@ -26,6 +26,13 @@ public class CardDocument {
             .collect(Collectors.toList());
     }
 
+    protected Card toGSON() {
+        Card card = new Card();
+        card.setSuit(Card.SuitEnum.fromValue(getSuit()));
+        card.setFace(Card.FaceEnum.fromValue(getFace()));
+        return card;
+    }
+
     public String getSuit() { return suit; }
     public void setSuit(String suit) { this.suit = suit; }
 

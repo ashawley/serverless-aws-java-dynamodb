@@ -2,6 +2,8 @@ package org.ninthfloor.bj21.dynamodb;
 
 import java.util.Optional;
 
+import org.ninthfloor.bj21.gson.Table;
+
 import com.google.gson.Gson;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
@@ -32,14 +34,14 @@ public class Tables {
         this.gson = gson;
     }
 
-    public PutItemOutcome add(org.ninthfloor.bj21.gson.Table table) {
+    public PutItemOutcome add(Table table) {
         String json = gson.toJson(table);
         Item item = Item.fromJSON(json).withPrimaryKey("key", "version0");
         return ddb.getTable(tablesTableName).putItem(item);
     }
 
-    public org.ninthfloor.bj21.gson.Table toJSON(Item item) {
-        return gson.fromJson(item.toJSON(), org.ninthfloor.bj21.gson.Table.class);
+    public Table toJSON(Item item) {
+        return gson.fromJson(item.toJSON(), Table.class);
     }
 
     public Optional<Item> getItem(Long id) {
@@ -48,34 +50,36 @@ public class Tables {
         );
     }
 
-    public Optional<org.ninthfloor.bj21.gson.Table> getById(Long id) {
+    public Optional<Table> getById(Long id) {
         return getItem(id).map(this::toJSON);
     }
 
-    public TableItem load(String key, Long id) {
-        return mapper.load(TableItem.class, key, id);
+    public Optional<TableItem> load(Long id) {
+        return Optional.ofNullable(
+            mapper.load(TableItem.class, "version0", id)
+        );
     }
 
     public void update(TableItem item) {
         mapper.save(item);
     }
 
-    public void update(org.ninthfloor.bj21.gson.Table table) {
+    public void update(Table table) {
         // mapper.load(TableItem.class, "version0", table.getId());
         mapper.save(TableItem.fromGSON(table));
     }
 
-    public Optional<org.ninthfloor.bj21.gson.Table> remove(Long id) {
+    public Optional<Table> remove(Long id) {
         return Optional.ofNullable(
             ddb.getTable(tablesTableName)
                .deleteItem("key", "version0", "id", id)
                .getItem()
         ).map((Item item) ->
-            gson.fromJson(item.toJSON(), org.ninthfloor.bj21.gson.Table.class)
+            gson.fromJson(item.toJSON(), Table.class)
         );
     }
 
-    public void remove(org.ninthfloor.bj21.gson.Table table) {
+    public void remove(Table table) {
         mapper.delete(TableItem.fromGSON(table));
     }
 }

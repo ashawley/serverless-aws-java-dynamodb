@@ -7,6 +7,7 @@ import java.util.Optional;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.junit.Before;
@@ -97,10 +98,11 @@ public class TablesTest {
 
         assertEquals("version0", tables.getItem(0L).get().getString("key"));
 
-        TableItem item = tables.load("version0", 0L);
+        Optional<TableItem> item = tables.load(0L);
 
-        assertEquals(Long.valueOf(0L), item.getDecks());
-        assertEquals(Long.valueOf(0L), item.getSeats());
+        assertTrue(item.isPresent());
+        assertEquals(Long.valueOf(0L), item.get().getDecks());
+        assertEquals(Long.valueOf(0L), item.get().getSeats());
 
         Optional<org.ninthfloor.bj21.gson.Table> opt =
             tables.getById(0L);

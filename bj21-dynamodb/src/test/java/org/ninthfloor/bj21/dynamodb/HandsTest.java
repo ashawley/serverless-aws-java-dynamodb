@@ -8,6 +8,7 @@ import java.util.Optional;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.junit.Before;
@@ -84,6 +85,11 @@ public class HandsTest {
     }
 
     @Test
+    public void loadTest() {
+        assertFalse(hands.load(0L).isPresent());
+    }
+
+    @Test
     public void addGetTest() {
         org.ninthfloor.bj21.gson.Hand gsonHand =
             new org.ninthfloor.bj21.gson.Hand();
@@ -114,10 +120,11 @@ public class HandsTest {
 
         assertEquals("version0", hands.getItem(0L).get().getString("key"));
 
-        HandItem item = hands.load("version0", 0L);
+        Optional<HandItem> item = hands.load(0L);
 
-        assertEquals(Long.valueOf(0L), item.getInitial());
-        assertEquals(Long.valueOf(0L), item.getBet());
+        assertTrue(item.isPresent());
+        assertEquals(Long.valueOf(0L), item.get().getInitial());
+        assertEquals(Long.valueOf(0L), item.get().getBet());
 
         Optional<org.ninthfloor.bj21.gson.Hand> opt =
             hands.getById(0L);

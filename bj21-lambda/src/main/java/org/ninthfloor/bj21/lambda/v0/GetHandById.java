@@ -287,7 +287,7 @@ public class GetHandById
             new APIGatewayProxyResponseEvent();
         response.setStatusCode(200);
         response.setHeaders(headers);
-        response.setBody(gson.toJson(table.get()));
+        response.setBody(gson.toJson(hand.get()));
         return response;
     }
 }
