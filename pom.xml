@@ -9,7 +9,7 @@
   <artifactId>bj21-parent</artifactId>
   <version>0.1.0-SNAPSHOT</version>
 
-  <url>https://ninthfloor.org/~ashawley/bj21/${project.version}</url>
+  <url>https://ninthfloor.org/~ashawley/bj21-sls/${project.version}</url>
 
   <packaging>pom</packaging>
 
