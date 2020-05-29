@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import org.ninthfloor.bj21.dynamodb.HandItem;
 import org.ninthfloor.bj21.dynamodb.Hands;
 import org.ninthfloor.bj21.dynamodb.Players;
 import org.ninthfloor.bj21.dynamodb.Tables;
@@ -15,6 +16,7 @@ import org.ninthfloor.bj21.gson.Table;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
+import com.amazonaws.services.dynamodbv2.document.Item;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
@@ -268,7 +270,8 @@ public class AddHand
         } // else
 
         Hands hands = new Hands(HANDS_TABLE_NAME, ddb, gson);
-        hands.add(hand);
+        Item item = hands.add(hand);
+        HandItem handItem = HandItem.fromItem(item);
 
         Map<String,String> headers = new HashMap<>();
         headers.put("Location",
@@ -279,7 +282,7 @@ public class AddHand
             new APIGatewayProxyResponseEvent();
         response.setStatusCode(201);
         response.setHeaders(headers);
-        response.setBody(gson.toJson(hand));
+        response.setBody(gson.toJson(handItem.toGSON()));
         return response;
     }
 }

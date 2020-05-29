@@ -18,7 +18,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
+import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.local.embedded.DynamoDBEmbedded;
 import com.amazonaws.services.dynamodbv2.model.AttributeDefinition;
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
@@ -76,7 +76,7 @@ public class HandsTest {
 
         gsonHand.setId(0L);
 
-        assertNull(hands.add(gsonHand).getItem());
+        assertEquals(0L, hands.add(gsonHand).getLong("id"));
     }
 
     @Test
@@ -114,17 +114,15 @@ public class HandsTest {
         gsonHand.setCards(cards);
         gsonHand.setActions(actions);
 
-        PutItemOutcome put = hands.add(gsonHand);
-
-        assertNull(put.getItem());
+        Item addedItem = hands.add(gsonHand);
 
         assertEquals("version0", hands.getItem(0L).get().getString("key"));
 
-        Optional<HandItem> item = hands.load(0L);
+        Optional<HandItem> readItem = hands.load(0L);
 
-        assertTrue(item.isPresent());
-        assertEquals(Long.valueOf(0L), item.get().getInitial());
-        assertEquals(Long.valueOf(0L), item.get().getBet());
+        assertTrue(readItem.isPresent());
+        assertEquals(Long.valueOf(0L), readItem.get().getInitial());
+        assertEquals(Long.valueOf(0L), readItem.get().getBet());
 
         Optional<org.ninthfloor.bj21.gson.Hand> opt =
             hands.getById(0L);
@@ -154,9 +152,7 @@ public class HandsTest {
         gsonHand.setId(0L);
         gsonHand.setInitial(0L);
 
-        PutItemOutcome put = hands.add(gsonHand);
-
-        assertNull(put.getItem());
+        Item item = hands.add(gsonHand);
 
         gsonHand.setInitial(1L);
 
@@ -181,9 +177,7 @@ public class HandsTest {
         gsonHand.setId(0L);
         gsonHand.setInitial(0L);
 
-        PutItemOutcome put = hands.add(gsonHand);
-
-        assertNull(put.getItem());
+        Item item = hands.add(gsonHand);
 
         gsonHand.setInitial(1L);
 
@@ -205,9 +199,7 @@ public class HandsTest {
 
         gsonHand.setId(0L);
 
-        PutItemOutcome put = hands.add(gsonHand);
-
-        assertNull(put.getItem());
+        Item item = hands.add(gsonHand);
 
         Optional<org.ninthfloor.bj21.gson.Hand> opt =
             hands.remove(0L);

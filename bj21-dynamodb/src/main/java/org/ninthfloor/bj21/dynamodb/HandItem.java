@@ -9,6 +9,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.amazonaws.services.dynamodbv2.document.Item;
 
 @DynamoDBTable(tableName="Hands")
 public class HandItem {
@@ -38,6 +39,27 @@ public class HandItem {
         handItem.setInitial(hand.getInitial());
         handItem.setBet(hand.getBet());
         handItem.setTotal(hand.getTotal());
+        return handItem;
+    }
+
+    public static HandItem fromItem(Item item) {
+        HandItem handItem = new HandItem();
+        handItem.setKey("version0");
+        handItem.setId(item.getLong("id"));
+        if (item.isPresent("prev")) {
+            handItem.setPrev(item.getLong("prev"));
+        }
+        handItem.setCards(CardDocument.fromGSON(item.getList("cards")));
+        handItem.setActions(item.getList("actions"));
+        if (item.isPresent("initial")) {
+            handItem.setInitial(item.getLong("initial"));
+        }
+        if (item.isPresent("bet")) {
+            handItem.setBet(item.getLong("bet"));
+        }
+        if (item.isPresent("total")) {
+            handItem.setTotal(item.getLong("total"));
+        }
         return handItem;
     }
 

@@ -6,6 +6,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.amazonaws.services.dynamodbv2.document.Item;
 
 @DynamoDBTable(tableName="Tables")
 public class TableItem {
@@ -29,6 +30,31 @@ public class TableItem {
         tableItem.setMinimum(table.getMinimum());
         tableItem.setMaximum(table.getMaximum());
         tableItem.setRounds(table.getRounds());
+        return tableItem;
+    }
+
+    public static TableItem fromItem(Item item) {
+        TableItem tableItem = new TableItem();
+        tableItem.setKey("version0");
+        tableItem.setId(item.getLong("id"));
+        if (item.isPresent("decks")) {
+            tableItem.setDecks(item.getLong("decks"));
+        }
+        if (item.isPresent("seats")) {
+            tableItem.setSeats(item.getLong("seats"));
+        }
+        if (item.isPresent("players")) {
+            tableItem.setPlayers(item.getLong("players"));
+        }
+        if (item.isPresent("minimum")) {
+            tableItem.setMinimum(item.getLong("minimum"));
+        }
+        if (item.isPresent("maximum")) {
+            tableItem.setMaximum(item.getLong("maximum"));
+        }
+        if (item.isPresent("rounds")) {
+            tableItem.setRounds(item.getLong("rounds"));
+        }
         return tableItem;
     }
 

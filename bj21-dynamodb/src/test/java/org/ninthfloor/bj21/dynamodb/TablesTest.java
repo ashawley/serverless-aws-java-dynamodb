@@ -17,7 +17,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
+import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.local.embedded.DynamoDBEmbedded;
 import com.amazonaws.services.dynamodbv2.model.AttributeDefinition;
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
@@ -75,7 +75,7 @@ public class TablesTest {
 
         gsonTable.setId(0L);
 
-        assertNull(tables.add(gsonTable).getItem());
+        assertEquals(0L, tables.add(gsonTable).getLong("id"));
     }
 
     @Test
@@ -92,17 +92,15 @@ public class TablesTest {
         gsonTable.setDecks(0L);
         gsonTable.setSeats(0L);
 
-        PutItemOutcome put = tables.add(gsonTable);
-
-        assertNull(put.getItem());
+        Item addedItem = tables.add(gsonTable);
 
         assertEquals("version0", tables.getItem(0L).get().getString("key"));
 
-        Optional<TableItem> item = tables.load(0L);
+        Optional<TableItem> readItem = tables.load(0L);
 
-        assertTrue(item.isPresent());
-        assertEquals(Long.valueOf(0L), item.get().getDecks());
-        assertEquals(Long.valueOf(0L), item.get().getSeats());
+        assertTrue(readItem.isPresent());
+        assertEquals(Long.valueOf(0L), readItem.get().getDecks());
+        assertEquals(Long.valueOf(0L), readItem.get().getSeats());
 
         Optional<org.ninthfloor.bj21.gson.Table> opt =
             tables.getById(0L);
@@ -129,9 +127,7 @@ public class TablesTest {
         gsonTable.setId(0L);
         gsonTable.setDecks(0L);
 
-        PutItemOutcome put = tables.add(gsonTable);
-
-        assertNull(put.getItem());
+        Item item = tables.add(gsonTable);
 
         gsonTable.setDecks(1L);
 
@@ -156,9 +152,7 @@ public class TablesTest {
         gsonTable.setId(0L);
         gsonTable.setDecks(0L);
 
-        PutItemOutcome put = tables.add(gsonTable);
-
-        assertNull(put.getItem());
+        Item item = tables.add(gsonTable);
 
         gsonTable.setDecks(1L);
 
@@ -180,9 +174,7 @@ public class TablesTest {
 
         gsonTable.setId(0L);
 
-        PutItemOutcome put = tables.add(gsonTable);
-
-        assertNull(put.getItem());
+        Item item = tables.add(gsonTable);
 
         Optional<org.ninthfloor.bj21.gson.Table> opt =
             tables.remove(0L);

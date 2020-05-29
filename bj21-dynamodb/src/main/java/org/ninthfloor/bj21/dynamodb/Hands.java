@@ -34,10 +34,11 @@ public class Hands {
         this.gson = gson;
     }
 
-    public PutItemOutcome add(Hand hand) {
+    public Item add(Hand hand) {
         String json = gson.toJson(hand);
         Item item = Item.fromJSON(json).withPrimaryKey("key", "version0");
-        return ddb.getTable(handsTableName).putItem(item);
+        ddb.getTable(handsTableName).putItem(item);
+        return item;
     }
 
     public Hand toJSON(Item item) {

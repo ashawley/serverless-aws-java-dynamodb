@@ -3,12 +3,14 @@ package org.ninthfloor.bj21.lambda.v0;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.ninthfloor.bj21.dynamodb.TableItem;
 import org.ninthfloor.bj21.dynamodb.Tables;
 import org.ninthfloor.bj21.gson.Error;
 import org.ninthfloor.bj21.gson.Table;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
+import com.amazonaws.services.dynamodbv2.document.Item;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
@@ -113,7 +115,8 @@ public class AddTable
         } // else
 
         Tables tables = new Tables(TABLES_TABLE_NAME, ddb, gson);
-        tables.add(table);
+        Item item = tables.add(table);
+        TableItem tableItem = TableItem.fromItem(item);
 
         Map<String,String> headers = new HashMap<>();
         headers.put("Location",
@@ -124,7 +127,7 @@ public class AddTable
             new APIGatewayProxyResponseEvent();
         response.setStatusCode(201);
         response.setHeaders(headers);
-        response.setBody(gson.toJson(table));
+        response.setBody(gson.toJson(tableItem.toGSON()));
         return response;
     }
 }
