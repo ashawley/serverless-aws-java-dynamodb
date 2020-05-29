@@ -1,5 +1,5 @@
 /*
- * Newrow 0.1.0
+ * Blackjack
  * Blackjack
  *
  * The version of the OpenAPI document: 0.1.0
@@ -23,7 +23,6 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import org.ninthfloor.bj21.gson.Hand;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -41,6 +40,14 @@ public class HandsTest {
     @Test
     public void testHands() {
         // TODO: test Hands
+    }
+
+    /**
+     * Test the property 'seatId'
+     */
+    @Test
+    public void seatIdTest() {
+        // TODO: test seatId
     }
 
     /**

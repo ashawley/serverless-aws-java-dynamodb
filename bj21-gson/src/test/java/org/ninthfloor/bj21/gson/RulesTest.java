@@ -1,5 +1,5 @@
 /*
- * Newrow 0.1.0
+ * Blackjack
  * Blackjack
  *
  * The version of the OpenAPI document: 0.1.0
@@ -39,6 +39,14 @@ public class RulesTest {
     @Test
     public void testRules() {
         // TODO: test Rules
+    }
+
+    /**
+     * Test the property 'tableId'
+     */
+    @Test
+    public void tableIdTest() {
+        // TODO: test tableId
     }
 
     /**
