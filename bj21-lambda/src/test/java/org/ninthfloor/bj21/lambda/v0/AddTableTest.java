@@ -98,7 +98,6 @@ public class AddTableTest
     @Test
     public void testHandleRequestFailure2()
     {
-        Map<String,String> queryStringParameters = new HashMap<>();
         table.setId(null);
         request.setBody(gson.toJson(table));
         APIGatewayProxyResponseEvent response =

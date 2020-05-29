@@ -187,6 +187,7 @@ public class AddHandTest
         hand.setId(null);
         request.setHttpMethod("POST");
         request.setPathParameters(pathParameters);
+        request.setQueryStringParameters(queryStringParameters);
         request.setBody(gson.toJson(hand));
         APIGatewayProxyResponseEvent response =
             addHand.handleRequest(request, context);
