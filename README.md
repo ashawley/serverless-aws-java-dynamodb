@@ -1,4 +1,4 @@
-bj21-java-client
+Blackjack client
 ==================
 
 Example using the new HTTP client (java.net.http.HttpClient) that
