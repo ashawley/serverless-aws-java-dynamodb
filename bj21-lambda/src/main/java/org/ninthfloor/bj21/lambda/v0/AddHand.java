@@ -85,7 +85,7 @@ public class AddHand
     /**
      * Mapping for parameters as a POJO.
      */
-    public class PathParameters {
+    private class PathParameters {
         private Map<String,String> params;
         public PathParameters(Map<String,String> params) {
             this.params = params;
@@ -107,7 +107,7 @@ public class AddHand
      * @param   params  Map&lt;String,String&gt;
      * @return  PathParameters
      */
-    public PathParameters fromMap(Map<String,String> params) {
+    private PathParameters fromMap(Map<String,String> params) {
         return new PathParameters(params);
     }
 
@@ -119,8 +119,8 @@ public class AddHand
      * @param   params          Map&lt;String,String&gt;
      * @return  String
      */
-    public String format(Handlebars handlebars, String pathTemplate,
-                         Map<String,String> params) {
+    private String format(Handlebars handlebars, String pathTemplate,
+                          Map<String,String> params) {
         try {
             return handlebars
                 .compileInline(pathTemplate)
