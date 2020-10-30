@@ -29,7 +29,8 @@ Show stack trace on failure:
 
 Build artifact for AWS Lambda:
 
-    $ mvn package -Dmaven.javadoc.skip -Dmaven.test.skip -pl :bj21-lambda -am
+    $ mvn package -Dmaven.javadoc.skip -Dmaven.jxr.skip -Dmaven.test.skip \
+                  -Dmaven.source.skip -pl :bj21-lambda -am
 
 Deploy to AWS Lambda:
 
