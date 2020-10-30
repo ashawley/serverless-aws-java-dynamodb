@@ -83,6 +83,7 @@ public class GetTableByIdTest
         getTableById.TABLES_TABLE_NAME = tableName;
         CreateTableResult res =
             createTable(ddb, tableName, attrs, ks, throughput);
+        assertEquals(Long.valueOf(0L), res.getTableDescription().getItemCount());
 
         tables = new Tables(tableName, ddb, gson);
     }

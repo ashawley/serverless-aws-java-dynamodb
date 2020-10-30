@@ -98,18 +98,21 @@ public class GetHandByIdTest
         getHandById.HANDS_TABLE_NAME = tableName;
         CreateTableResult res0 =
             createTable(ddb, tableName, attrs, ks, throughput);
+        assertEquals(Long.valueOf(0L), res0.getTableDescription().getItemCount());
         hands = new Hands(tableName, ddb, gson);
 
         tableName = "Players";
         getHandById.PLAYERS_TABLE_NAME = tableName;
         CreateTableResult res1 =
             createTable(ddb, tableName, attrs, ks, throughput);
+        assertEquals(Long.valueOf(0L), res1.getTableDescription().getItemCount());
         players = new Players(tableName, ddb, gson);
 
         tableName = "Tables";
         getHandById.TABLES_TABLE_NAME = tableName;
         CreateTableResult res2 =
             createTable(ddb, tableName, attrs, ks, throughput);
+        assertEquals(Long.valueOf(0L), res2.getTableDescription().getItemCount());
         tables = new Tables(tableName, ddb, gson);
     }
 

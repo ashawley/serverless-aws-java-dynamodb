@@ -60,6 +60,7 @@ public class TablesTest {
 
         CreateTableResult res =
             createTable(ddb, "Tables", attrs, ks, throughput);
+        assertEquals(Long.valueOf(0L), res.getTableDescription().getItemCount());
     }
 
     @After

@@ -61,6 +61,7 @@ public class HandsTest {
 
         CreateTableResult res =
             createTable(ddb, "Hands", attrs, ks, throughput);
+        assertEquals(Long.valueOf(0L), res.getTableDescription().getItemCount());
     }
 
     @After

@@ -80,6 +80,7 @@ public class AddTableTest
         addTable.TABLES_TABLE_NAME = tableName;
         CreateTableResult res =
             createTable(ddb, tableName, attrs, ks, throughput);
+        assertEquals(Long.valueOf(0L), res.getTableDescription().getItemCount());
     }
 
     @Test
