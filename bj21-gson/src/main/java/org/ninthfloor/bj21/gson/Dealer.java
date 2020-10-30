@@ -28,7 +28,7 @@ import org.ninthfloor.bj21.gson.Hand;
 /**
  * Dealer
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-05-26T09:55:48.852-04:00[America/New_York]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-29T22:25:59.793-04:00[America/New_York]")
 public class Dealer {
   public static final String SERIALIZED_NAME_TABLE_ID = "tableId";
   @SerializedName(SERIALIZED_NAME_TABLE_ID)
@@ -111,7 +111,7 @@ public class Dealer {
 
 
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -145,7 +145,7 @@ public class Dealer {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }
