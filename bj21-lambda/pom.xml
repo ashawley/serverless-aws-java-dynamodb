@@ -54,7 +54,7 @@
       <version>1.11.780</version>
       <exclusions>
         <exclusion>
-	  <groupId>com.amazonaws</groupId>
+          <groupId>com.amazonaws</groupId>
           <artifactId>aws-java-sdk-s3</artifactId>
         </exclusion>
       </exclusions>
@@ -159,6 +159,12 @@
       <artifactId>slf4j-nop</artifactId>
       <version>1.8.0-alpha1</version>
       <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+      <version>1.7.30</version>
     </dependency>
 
     <dependency>
