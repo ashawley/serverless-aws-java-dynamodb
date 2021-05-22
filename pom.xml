@@ -20,6 +20,13 @@
     <module>bj21-lambda</module>
   </modules>
 
+  <repositories>
+    <repository>
+      <id>sonatype-nexus-snapshots</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </repository>
+  </repositories>
+
   <pluginRepositories>
     <pluginRepository>
       <id>apache.snapshots</id>
