@@ -42,14 +42,14 @@
     <dependency>
       <groupId>com.amazonaws</groupId>
       <artifactId>aws-java-sdk-dynamodb</artifactId>
-      <version>1.11.780</version>
+      <version>1.11.781</version>
     </dependency>
 
     <!-- https://s3-us-west-2.amazonaws.com/dynamodb-local/release/com/amazonaws/DynamoDBLocal/maven-metadata.xml -->
     <dependency>
       <groupId>com.amazonaws</groupId>
       <artifactId>DynamoDBLocal</artifactId>
-      <version>1.13.2</version>
+      <version>1.13.3</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -113,14 +113,14 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.13.1</version>
+      <version>4.13.2</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>3.4.2</version>
+      <version>3.4.3</version>
       <scope>test</scope>
     </dependency>
 
@@ -218,7 +218,7 @@
       <!-- <plugin> -->
       <!--   <groupId>org.codehaus.mojo</groupId> -->
       <!--   <artifactId>appassembler-maven-plugin</artifactId> -->
-      <!--   <version>1.0-alpha-2</version> -->
+      <!--   <version>2.1.0</version> -->
       <!--   <executions> -->
       <!--     <execution> -->
       <!--       <id>assemble</id> -->
