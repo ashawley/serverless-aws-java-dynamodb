@@ -68,6 +68,8 @@ public class DeleteHandTest
     @Mock
     private Context context;
 
+    private APIGatewayProxyRequestEvent.ProxyRequestContext requestContext;
+
     @Before
     public void init()
     {
@@ -77,6 +79,8 @@ public class DeleteHandTest
         player = new Player();
         table = new Table();
         request = new APIGatewayProxyRequestEvent();
+        requestContext = new APIGatewayProxyRequestEvent.ProxyRequestContext();
+        request.setRequestContext(requestContext);
         gson = gsonBuilder.create();
 
         List<AttributeDefinition> attrs =
@@ -215,6 +219,7 @@ public class DeleteHandTest
         request.setHttpMethod("DELETE");
         request.setResource("/v0/tables/{tableId}/players/{seatId}/hands/{handId}");
         request.setPath("/v0/tables/0/players/0/hands/0");
+        requestContext.setPath("/dev/v0/tables/0/players/0/hands/0");
         request.setPathParameters(pathParameters);
         request.setQueryStringParameters(queryStringParameters);
         request.setHeaders(headers);

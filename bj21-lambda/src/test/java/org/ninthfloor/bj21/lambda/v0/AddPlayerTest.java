@@ -1,9 +1,7 @@
 package org.ninthfloor.bj21.lambda.v0;
 
-import org.ninthfloor.bj21.dynamodb.Hands;
 import org.ninthfloor.bj21.dynamodb.Players;
 import org.ninthfloor.bj21.dynamodb.Tables;
-import org.ninthfloor.bj21.gson.Hand;
 import org.ninthfloor.bj21.gson.Player;
 import org.ninthfloor.bj21.gson.Table;
 
@@ -42,13 +40,9 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class AddHandTest
+public class AddPlayerTest
 {
-    private AddHand addHand;
-
-    private Hand hand;
-
-    private Hands hands;
+    private AddPlayer addPlayer;
 
     private Player player;
 
@@ -76,8 +70,7 @@ public class AddHandTest
     public void init()
     {
         ddb = DynamoDBEmbedded.create().amazonDynamoDB();
-        addHand = new AddHand(ddb);
-        hand = new Hand();
+        addPlayer = new AddPlayer(ddb);
         player = new Player();
         table = new Table();
         request = new APIGatewayProxyRequestEvent();
@@ -100,22 +93,15 @@ public class AddHandTest
 
         String tableName;
 
-        tableName = "Hands";
-        addHand.HANDS_TABLE_NAME = tableName;
-        CreateTableResult res0 =
-            createTable(ddb, tableName, attrs, ks, throughput);
-        assertEquals(Long.valueOf(0L), res0.getTableDescription().getItemCount());
-        hands = new Hands(tableName, ddb, gson);
-
         tableName = "Players";
-        addHand.PLAYERS_TABLE_NAME = tableName;
+        addPlayer.PLAYERS_TABLE_NAME = tableName;
         CreateTableResult res1 =
             createTable(ddb, tableName, attrs, ks, throughput);
         assertEquals(Long.valueOf(0L), res1.getTableDescription().getItemCount());
         players = new Players(tableName, ddb, gson);
 
         tableName = "Tables";
-        addHand.TABLES_TABLE_NAME = tableName;
+        addPlayer.TABLES_TABLE_NAME = tableName;
         CreateTableResult res2 =
             createTable(ddb, tableName, attrs, ks, throughput);
         assertEquals(Long.valueOf(0L), res2.getTableDescription().getItemCount());
@@ -127,11 +113,10 @@ public class AddHandTest
     {
         Map<String,String> pathParameters = new HashMap<>();
         pathParameters.put("tableId", "0");
-        pathParameters.put("seatId", "0");
         request.setHttpMethod("POST");
         request.setPathParameters(pathParameters);
         APIGatewayProxyResponseEvent response =
-            addHand.handleRequest(request, context);
+            addPlayer.handleRequest(request, context);
         assertEquals("application/json",
                      response.getHeaders().get("Content-Type"));
         assertNull(response.getHeaders().get("Location"));
@@ -145,35 +130,12 @@ public class AddHandTest
     {
         Map<String,String> pathParameters = new HashMap<>();
         pathParameters.put("tableId", "0");
-        pathParameters.put("seatId", "0");
         request.setHttpMethod("POST");
         request.setPathParameters(pathParameters);
         table.setId(0L);
         tables.add(table);
         APIGatewayProxyResponseEvent response =
-            addHand.handleRequest(request, context);
-        assertEquals("application/json",
-                     response.getHeaders().get("Content-Type"));
-        assertNull(response.getHeaders().get("Location"));
-        assertEquals(Integer.valueOf(404), response.getStatusCode());
-        assertEquals("{\"message\":\"Not found\",\"file\":\"POST /v0/tables/0/players/0\"}",
-                     response.getBody());
-    }
-
-    @Test
-    public void testHandleRequestFailure3()
-    {
-        Map<String,String> pathParameters = new HashMap<>();
-        pathParameters.put("tableId", "0");
-        pathParameters.put("seatId", "0");
-        request.setHttpMethod("POST");
-        request.setPathParameters(pathParameters);
-        table.setId(0L);
-        tables.add(table);
-        player.setId(0L);
-        players.add(player);
-        APIGatewayProxyResponseEvent response =
-            addHand.handleRequest(request, context);
+            addPlayer.handleRequest(request, context);
         assertEquals("application/json",
                      response.getHeaders().get("Content-Type"));
         assertNull(response.getHeaders().get("Location"));
@@ -183,23 +145,20 @@ public class AddHandTest
     }
 
     @Test
-    public void testHandleRequestFailure4()
+    public void testHandleRequestFailure3()
     {
         Map<String,String> pathParameters = new HashMap<>();
         Map<String,String> queryStringParameters = new HashMap<>();
         pathParameters.put("tableId", "0");
-        pathParameters.put("seatId", "0");
         table.setId(0L);
         tables.add(table);
-        player.setId(0L);
-        players.add(player);
-        hand.setId(null);
+        player.setId(null);
         request.setHttpMethod("POST");
         request.setPathParameters(pathParameters);
         request.setQueryStringParameters(queryStringParameters);
-        request.setBody(gson.toJson(hand));
+        request.setBody(gson.toJson(player));
         APIGatewayProxyResponseEvent response =
-            addHand.handleRequest(request, context);
+            addPlayer.handleRequest(request, context);
         assertEquals("application/json",
                      response.getHeaders().get("Content-Type"));
         assertNull(response.getHeaders().get("Location"));
@@ -219,30 +178,27 @@ public class AddHandTest
         headers.put("Host",
                     "blackjack.dev");
         pathParameters.put("tableId", "0");
-        pathParameters.put("seatId", "0");
         request.setHttpMethod("POST");
-        request.setResource("/v0/tables/{tableId}/players/{seatId}/hands");
-        request.setPath("/v0/tables/0/players/0/hands");
-        requestContext.setPath("/dev/v0/tables/0/players/0/hands");
+        request.setResource("/v0/tables/{tableId}/players");
+        request.setPath("/v0/tables/0/players");
+        requestContext.setPath("/dev/v0/tables/0/players");
         request.setPathParameters(pathParameters);
         request.setQueryStringParameters(queryStringParameters);
         request.setHeaders(headers);
         table.setId(0L);
         tables.add(table);
         player.setId(0L);
-        players.add(player);
-        hand.setId(0L);
-        request.setBody(gson.toJson(hand));
+        request.setBody(gson.toJson(player));
         APIGatewayProxyResponseEvent response =
-            addHand.handleRequest(request, context);
+            addPlayer.handleRequest(request, context);
         assertEquals("application/json",
                      response.getHeaders().get("Content-Type"));
-        assertEquals("https://blackjack.dev/dev/v0/tables/0/players/0/hands/0",
+        assertEquals("https://blackjack.dev/dev/v0/tables/0/players/0",
                      response.getHeaders().get("Location"));
         assertEquals(Integer.valueOf(201), response.getStatusCode());
-        assertEquals(gson.toJson(hand), response.getBody());
-        Optional<Hand> hand = hands.getById(0L);
-        assertTrue(hand.isPresent());
+        assertEquals(gson.toJson(player), response.getBody());
+        Optional<Player> player = players.getById(0L);
+        assertTrue(player.isPresent());
     }
 
     @Test
@@ -253,7 +209,6 @@ public class AddHandTest
         Map<String,String> queryStringParameters = new HashMap<>();
         pathParameters.put("tableId", "0");
         headers.put("Host", "");
-        pathParameters.put("seatId", "0");
         request.setHttpMethod("");
         request.setResource("");
         request.setPath("");
@@ -264,15 +219,13 @@ public class AddHandTest
         table.setId(0L);
         tables.add(table);
         player.setId(0L);
-        players.add(player);
-        hand.setId(0L);
-        request.setBody(gson.toJson(hand));
+        request.setBody(gson.toJson(player));
         APIGatewayProxyResponseEvent response =
-            addHand.handleRequest(request, context);
+            addPlayer.handleRequest(request, context);
         assertEquals("application/json",
                      response.getHeaders().get("Content-Type"));
         assertEquals(Integer.valueOf(201), response.getStatusCode());
-        assertEquals(gson.toJson(hand), response.getBody());
+        assertEquals(gson.toJson(player), response.getBody());
     }
 
     private CreateTableResult createTable(

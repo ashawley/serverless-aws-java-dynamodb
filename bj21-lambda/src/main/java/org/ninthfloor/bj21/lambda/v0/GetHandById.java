@@ -35,7 +35,7 @@ public class GetHandById
     implements RequestHandler<APIGatewayProxyRequestEvent,
                               APIGatewayProxyResponseEvent>
 {
-    private AmazonDynamoDB ddb;
+    final private AmazonDynamoDB ddb;
 
     final private GsonBuilder gsonBuilder =
         new GsonBuilder();
@@ -83,17 +83,32 @@ public class GetHandById
     /**
      * Mapping for parameters as a POJO.
      */
-    private class PathParameters {
+    private class UriParameters {
         private Map<String,String> params;
-        public PathParameters(Map<String,String> params) {
+        public UriParameters(Map<String,String> params) {
             this.params = params;
         }
+        @SuppressWarnings("unused")
+        public String getSchema() {
+            return params.get("schema");
+        }
+        @SuppressWarnings("unused")
+        public String getHost() {
+            return params.get("host");
+        }
+        @SuppressWarnings("unused")
+        public String getPath() {
+            return params.get("path");
+        }
+        @SuppressWarnings("unused")
         public String getTableId() {
             return params.get("tableId");
         }
+        @SuppressWarnings("unused")
         public String getSeatId() {
             return params.get("seatId");
         }
+        @SuppressWarnings("unused")
         public String getHandId() {
             return params.get("handId");
         }
@@ -103,29 +118,29 @@ public class GetHandById
      * Factory for POJO from parameters map.
      *
      * @param   params  Map&lt;String,String&gt;
-     * @return  PathParameters
+     * @return  UriParameters
      */
-    private PathParameters fromMap(Map<String,String> params) {
-        return new PathParameters(params);
+    private UriParameters fromMap(Map<String,String> params) {
+        return new UriParameters(params);
     }
 
     /**
-     * Format resource path with parameters.
+     * Format uri with parameters.
      *
      * @param   handlebars      Handlebars
-     * @param   pathTemplate    String
+     * @param   uriTemplate    String
      * @param   params          Map&lt;String,String&gt;
      * @return  String
      */
-    private String format(Handlebars handlebars, String pathTemplate,
+    private String format(Handlebars handlebars, String uriTemplate,
                           Map<String,String> params) {
         try {
             return handlebars
-                .compileInline(pathTemplate)
+                .compileInline(uriTemplate)
                 .apply(fromMap(params));
         } catch (IOException e) {
             logger.error("Unable to format error: {}", e);
-            return pathTemplate; // ???
+            return uriTemplate; // ???
         }
     }
 
@@ -136,6 +151,9 @@ public class GetHandById
         logger.info("HTTP method: {}", request.getHttpMethod());
         logger.info("Resource path: {}", request.getResource());
         logger.info("Request path: {}", request.getPath());
+        logger.info("Account id: {}", request.getRequestContext().getAccountId());
+        logger.info("Api id: {}", request.getRequestContext().getApiId());
+        logger.info("Context path: {}", request.getRequestContext().getPath());
         logger.info("Path parameters: {}", request.getPathParameters());
         logger.info("Request query: {}", request.getQueryStringParameters());
         if (request.getHeaders() == null) {
@@ -144,7 +162,12 @@ public class GetHandById
         } else {
             logger.info("Accept header: {}",
                         request.getHeaders().get("Accept"));
+            logger.info("Content-Type header: {}",
+                        request.getHeaders().get("Content-Type"));
+            logger.info("Host header: {}",
+                        request.getHeaders().get("Host"));
         }
+        logger.info("Request body: {}", request.getBody());
 
         String tableIdParam = request.getPathParameters().get("tableId");
         if (!StringUtils.isNumeric(tableIdParam)) {

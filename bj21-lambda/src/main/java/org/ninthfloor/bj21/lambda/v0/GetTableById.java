@@ -28,7 +28,7 @@ public class GetTableById
     implements RequestHandler<APIGatewayProxyRequestEvent,
                               APIGatewayProxyResponseEvent>
 {
-    private AmazonDynamoDB ddb;
+    final private AmazonDynamoDB ddb;
 
     final private GsonBuilder gsonBuilder =
         new GsonBuilder();

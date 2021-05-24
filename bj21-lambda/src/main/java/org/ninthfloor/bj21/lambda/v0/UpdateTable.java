@@ -27,7 +27,7 @@ public class UpdateTable
     implements RequestHandler<APIGatewayProxyRequestEvent,
                               APIGatewayProxyResponseEvent>
 {
-    private AmazonDynamoDB ddb;
+    final private AmazonDynamoDB ddb;
 
     final private GsonBuilder gsonBuilder =
         new GsonBuilder();

@@ -5,16 +5,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import org.ninthfloor.bj21.dynamodb.Hands;
+import org.ninthfloor.bj21.dynamodb.PlayerItem;
 import org.ninthfloor.bj21.dynamodb.Players;
 import org.ninthfloor.bj21.dynamodb.Tables;
 import org.ninthfloor.bj21.gson.Error;
-import org.ninthfloor.bj21.gson.Hand;
 import org.ninthfloor.bj21.gson.Player;
 import org.ninthfloor.bj21.gson.Table;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
+import com.amazonaws.services.dynamodbv2.document.Item;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
@@ -31,7 +31,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DeleteHand
+public class AddPlayer
     implements RequestHandler<APIGatewayProxyRequestEvent,
                               APIGatewayProxyResponseEvent>
 {
@@ -57,7 +57,7 @@ public class DeleteHand
         System.getenv("TABLES_TABLE_NAME");
 
     private final static Logger logger =
-        LoggerFactory.getLogger(DeleteHand.class);
+        LoggerFactory.getLogger(AddPlayer.class);
 
     /**
      * Constructor for test suite.
@@ -66,7 +66,7 @@ public class DeleteHand
      *
      * @param   ddb     AmazonDynamoDB
      */
-    public DeleteHand(AmazonDynamoDB ddb) {
+    public AddPlayer(AmazonDynamoDB ddb) {
         this.ddb = ddb;
     }
 
@@ -76,7 +76,7 @@ public class DeleteHand
      * This is not called by the test suite.
      * This will auto-configure the {@link AmazonDynamoDB} connection.
      */
-    public DeleteHand() {
+    public AddPlayer() {
         this(AmazonDynamoDBClientBuilder.standard().build());
     }
 
@@ -213,16 +213,27 @@ public class DeleteHand
             return response;
         } // else
 
-        String seatIdParam = request.getPathParameters().get("seatId");
-        if (!StringUtils.isNumeric(seatIdParam)) {
-            logger.error("Responding with a 405 error");
+        Player player = gson.fromJson(request.getBody(), Player.class);
+
+        if (player == null) {
+            logger.error("Failed to deserialize JSON in request body");
             Error error = new Error();
             error.setMessage("Invalid input");
-            String path =
-                format(handlebars,
-                       "/v0/tables/{{tableId}}/players/{{seatId}}",
-                       request.getPathParameters());
-            error.setFile(request.getHttpMethod() + " " + path);
+            error.setFile("HTTP-body");
+            Map<String,String> headers = new HashMap<>();
+            headers.put("Content-Type",
+                        "application/json");
+            APIGatewayProxyResponseEvent response =
+                new APIGatewayProxyResponseEvent();
+            response.setStatusCode(405);
+            response.setHeaders(headers);
+            response.setBody(gson.toJson(error));
+            return response;
+        } else if (player.getId() == null) {
+            logger.error("Missing required id field in JSON");
+            Error error = new Error();
+            error.setMessage("Invalid input");
+            error.setFile("HTTP-body");
             Map<String,String> headers = new HashMap<>();
             headers.put("Content-Type",
                         "application/json");
@@ -234,84 +245,28 @@ public class DeleteHand
             return response;
         } // else
 
-        Long seatId = Long.valueOf(seatIdParam);
         Players players = new Players(PLAYERS_TABLE_NAME, ddb, gson);
-        Optional<Player> player = players.getById(seatId);
-        if (!player.isPresent()) {
-            logger.error("Responding with a 404 error");
-            Error error = new Error();
-            error.setMessage("Not found");
-            String path =
-                format(handlebars,
-                       "/v0/tables/{{tableId}}/players/{{seatId}}",
-                       request.getPathParameters());
-            error.setFile(request.getHttpMethod() + " " + path);
-            Map<String,String> headers = new HashMap<>();
-            headers.put("Content-Type",
-                        "application/json");
-            APIGatewayProxyResponseEvent response =
-                new APIGatewayProxyResponseEvent();
-            response.setStatusCode(404);
-            response.setHeaders(headers);
-            response.setBody(gson.toJson(error));
-            return response;
-        } // else
+        Item item = players.add(player);
+        /* PlayerItem playerItem = */ PlayerItem.fromItem(item);
 
-        String handIdParam = request.getPathParameters().get("handId");
-        if (!StringUtils.isNumeric(handIdParam)) {
-            logger.error("Responding with a 405 error");
-            Error error = new Error();
-            error.setMessage("Invalid input");
-            String path =
-                format(handlebars,
-                       "/v0/tables/{{tableId}}/players/{{seatId}}/hands/{{handId}}",
-                       request.getPathParameters());
-            error.setFile(request.getHttpMethod() + " " + path);
-            Map<String,String> headers = new HashMap<>();
-            headers.put("Content-Type",
-                        "application/json");
-            APIGatewayProxyResponseEvent response =
-                new APIGatewayProxyResponseEvent();
-            response.setStatusCode(405);
-            response.setHeaders(headers);
-            response.setBody(gson.toJson(error));
-            return response;
-        } // else
-
-        Long handId = Long.valueOf(handIdParam);
-        Hands hands = new Hands(HANDS_TABLE_NAME, ddb, gson);
-        Optional<Hand> hand = hands.getById(handId);
-        /* Optional<Hand> hand = */ hands.remove(handId);
-        if (!hand.isPresent()) {
-            logger.error("Responding with a 404 error");
-            Error error = new Error();
-            error.setMessage("Not found");
-            String path =
-                format(handlebars,
-                       "/v0/tables/{{tableId}}/players/{{seatId}}/hands/{{handId}}",
-                       request.getPathParameters());
-            error.setFile(request.getHttpMethod() + " " + path);
-            Map<String,String> headers = new HashMap<>();
-            headers.put("Content-Type",
-                        "application/json");
-            APIGatewayProxyResponseEvent response =
-                new APIGatewayProxyResponseEvent();
-            response.setStatusCode(404);
-            response.setHeaders(headers);
-            response.setBody(gson.toJson(error));
-            return response;
-        } // else
-
-        logger.info("Request body: {}", request.getBody());
-        logger.info("Responding with a 200 error");
         Map<String,String> headers = new HashMap<>();
+        Map<String,String> uriParameters = new HashMap<>();
+        uriParameters.put("schema", "https");
+        uriParameters.put("host", request.getHeaders().get("Host")); // !
+        uriParameters.put("path", request.getRequestContext().getPath());
+        uriParameters.put("seatId", player.getId().toString());
+        String location =
+            format(handlebars,
+                   "{{schema}}://{{host}}{{path}}/{{seatId}}",
+                   uriParameters);
+        headers.put("Location", location);
         headers.put("Content-Type",
                     "application/json");
         APIGatewayProxyResponseEvent response =
             new APIGatewayProxyResponseEvent();
-        response.setStatusCode(200);
+        response.setStatusCode(201);
         response.setHeaders(headers);
-        response.setBody(gson.toJson(hand.get()));
+        response.setBody(gson.toJson(player));
         return response;
     }
 }

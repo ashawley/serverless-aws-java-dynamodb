@@ -1,5 +1,6 @@
 package org.ninthfloor.bj21.lambda.v0;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +21,8 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import com.github.jknack.handlebars.Handlebars;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,13 +30,16 @@ public class AddTable
     implements RequestHandler<APIGatewayProxyRequestEvent,
                               APIGatewayProxyResponseEvent>
 {
-    private AmazonDynamoDB ddb;
+    final private AmazonDynamoDB ddb;
 
     final private GsonBuilder gsonBuilder =
         new GsonBuilder();
 
     final private Gson gson =
         gsonBuilder.create();
+
+    final private Handlebars handlebars =
+        new Handlebars();
 
     // This field is mutable and is public.
     // This is used by the test suite,
@@ -43,7 +49,7 @@ public class AddTable
 
     private final static Logger logger =
         LoggerFactory.getLogger(AddTable.class);
-    
+
     /**
      * Constructor for test suite.
      *
@@ -65,6 +71,62 @@ public class AddTable
         this(AmazonDynamoDBClientBuilder.standard().build());
     }
 
+    /**
+     * Mapping for parameters as a POJO.
+     */
+    private class UriParameters {
+        private Map<String,String> params;
+        public UriParameters(Map<String,String> params) {
+            this.params = params;
+        }
+        @SuppressWarnings("unused")
+        public String getSchema() {
+            return params.get("schema");
+        }
+        @SuppressWarnings("unused")
+        public String getHost() {
+            return params.get("host");
+        }
+        @SuppressWarnings("unused")
+        public String getPath() {
+            return params.get("path");
+        }
+        @SuppressWarnings("unused")
+        public String getTableId() {
+            return params.get("tableId");
+        }
+    }
+
+    /**
+     * Factory for POJO from parameters map.
+     *
+     * @param   params  Map&lt;String,String&gt;
+     * @return  UriParameters
+     */
+    private UriParameters fromMap(Map<String,String> params) {
+        return new UriParameters(params);
+    }
+
+    /**
+     * Format uri with parameters.
+     *
+     * @param   handlebars      Handlebars
+     * @param   uriTemplate    String
+     * @param   params          Map&lt;String,String&gt;
+     * @return  String
+     */
+    private String format(Handlebars handlebars, String uriTemplate,
+                          Map<String,String> params) {
+        try {
+            return handlebars
+                .compileInline(uriTemplate)
+                .apply(fromMap(params));
+        } catch (IOException e) {
+            logger.error("Unable to format error: {}", e);
+            return uriTemplate; // ???
+        }
+    }
+
     public APIGatewayProxyResponseEvent handleRequest(
         APIGatewayProxyRequestEvent request,
         Context context)
@@ -72,6 +134,9 @@ public class AddTable
         logger.info("HTTP method: {}", request.getHttpMethod());
         logger.info("Resource path: {}", request.getResource());
         logger.info("Request path: {}", request.getPath());
+        logger.info("Account id: {}", request.getRequestContext().getAccountId());
+        logger.info("Api id: {}", request.getRequestContext().getApiId());
+        logger.info("Context path: {}", request.getRequestContext().getPath());
         logger.info("Path parameters: {}", request.getPathParameters());
         logger.info("Request query: {}", request.getQueryStringParameters());
         if (request.getHeaders() == null) {
@@ -80,6 +145,10 @@ public class AddTable
         } else {
             logger.info("Accept header: {}",
                         request.getHeaders().get("Accept"));
+            logger.info("Content-Type header: {}",
+                        request.getHeaders().get("Content-Type"));
+            logger.info("Host header: {}",
+                        request.getHeaders().get("Host"));
         }
         logger.info("Request body: {}", request.getBody());
         Table table = gson.fromJson(request.getBody(), Table.class);
@@ -119,8 +188,16 @@ public class AddTable
         TableItem tableItem = TableItem.fromItem(item);
 
         Map<String,String> headers = new HashMap<>();
-        headers.put("Location",
-                    "https://blackjack.dev/v0/tables/0");
+        Map<String,String> uriParameters = new HashMap<>();
+        uriParameters.put("schema", "https");
+        uriParameters.put("host", request.getHeaders().get("Host")); // !
+        uriParameters.put("path", request.getRequestContext().getPath());
+        uriParameters.put("tableId", table.getId().toString());
+        String location =
+            format(handlebars,
+                   "{{schema}}://{{host}}{{path}}/{{tableId}}",
+                   uriParameters);
+        headers.put("Location", location);
         headers.put("Content-Type",
                     "application/json");
         APIGatewayProxyResponseEvent response =

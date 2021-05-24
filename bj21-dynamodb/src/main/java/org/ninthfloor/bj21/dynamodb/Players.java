@@ -11,7 +11,6 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
-import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 
 public class Players {
 
@@ -34,10 +33,11 @@ public class Players {
         this.gson = gson;
     }
 
-    public PutItemOutcome add(Player player) {
+    public Item add(Player player) {
         String json = gson.toJson(player);
         Item item = Item.fromJSON(json).withPrimaryKey("key", "version0");
-        return ddb.getTable(playersTableName).putItem(item);
+        ddb.getTable(playersTableName).putItem(item);
+        return item;
     }
 
     public Player toJSON(Item item) {

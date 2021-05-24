@@ -56,6 +56,8 @@ public class GetTableByIdTest
     @Mock
     private Context context;
 
+    private APIGatewayProxyRequestEvent.ProxyRequestContext requestContext;
+
     @Before
     public void init()
     {
@@ -63,6 +65,8 @@ public class GetTableByIdTest
         getTableById = new GetTableById(ddb);
         table = new Table();
         request = new APIGatewayProxyRequestEvent();
+        requestContext = new APIGatewayProxyRequestEvent.ProxyRequestContext();
+        request.setRequestContext(requestContext);
         gson = gsonBuilder.create();
 
         List<AttributeDefinition> attrs =

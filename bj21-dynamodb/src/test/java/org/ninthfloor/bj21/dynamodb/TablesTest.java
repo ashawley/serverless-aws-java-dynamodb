@@ -99,6 +99,7 @@ public class TablesTest {
         Optional<TableItem> readItem = tables.load(0L);
 
         assertTrue(readItem.isPresent());
+        assertEquals(Long.valueOf(addedItem.getLong("id")), readItem.get().getId());
         assertEquals(Long.valueOf(0L), readItem.get().getDecks());
         assertEquals(Long.valueOf(0L), readItem.get().getSeats());
 
@@ -132,6 +133,8 @@ public class TablesTest {
         gsonTable.setDecks(1L);
 
         tables.update(gsonTable);
+
+        assertEquals(0L, item.getLong("id"));
     }
 
     @Test
@@ -157,6 +160,8 @@ public class TablesTest {
         gsonTable.setDecks(1L);
 
         tables.remove(gsonTable);
+
+        assertEquals(0L, item.getLong("id"));
     }
 
     @Test
@@ -178,6 +183,9 @@ public class TablesTest {
 
         Optional<org.ninthfloor.bj21.gson.Table> opt =
             tables.remove(0L);
+
+        assertFalse(opt.isPresent());
+        assertEquals(0L, item.getLong("id"));
     }
 
     private CreateTableResult createTable(

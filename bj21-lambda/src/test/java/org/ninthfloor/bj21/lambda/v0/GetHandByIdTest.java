@@ -68,6 +68,8 @@ public class GetHandByIdTest
     @Mock
     private Context context;
 
+    private APIGatewayProxyRequestEvent.ProxyRequestContext requestContext;
+
     @Before
     public void init()
     {
@@ -77,6 +79,8 @@ public class GetHandByIdTest
         player = new Player();
         table = new Table();
         request = new APIGatewayProxyRequestEvent();
+        requestContext = new APIGatewayProxyRequestEvent.ProxyRequestContext();
+        request.setRequestContext(requestContext);
         gson = gsonBuilder.create();
 
         List<AttributeDefinition> attrs =

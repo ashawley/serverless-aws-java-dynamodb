@@ -121,6 +121,7 @@ public class HandsTest {
         Optional<HandItem> readItem = hands.load(0L);
 
         assertTrue(readItem.isPresent());
+        assertEquals(Long.valueOf(addedItem.getLong("id")), readItem.get().getId());
         assertEquals(Long.valueOf(0L), readItem.get().getInitial());
         assertEquals(Long.valueOf(0L), readItem.get().getBet());
 
@@ -157,6 +158,9 @@ public class HandsTest {
         gsonHand.setInitial(1L);
 
         hands.update(gsonHand);
+
+        assertEquals(0L, item.getLong("id"));
+
     }
 
     @Test
@@ -182,6 +186,9 @@ public class HandsTest {
         gsonHand.setInitial(1L);
 
         hands.remove(gsonHand);
+
+        assertEquals(0L, item.getLong("id"));
+
     }
 
     @Test
@@ -203,6 +210,9 @@ public class HandsTest {
 
         Optional<org.ninthfloor.bj21.gson.Hand> opt =
             hands.remove(0L);
+
+        assertEquals(0L, item.getLong("id"));
+        assertFalse(opt.isPresent());
     }
 
     private CreateTableResult createTable(

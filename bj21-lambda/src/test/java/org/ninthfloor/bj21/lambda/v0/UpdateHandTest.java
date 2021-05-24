@@ -10,6 +10,7 @@ import org.ninthfloor.bj21.gson.Table;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.List;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
@@ -31,6 +32,7 @@ import com.google.gson.GsonBuilder;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -68,6 +70,8 @@ public class UpdateHandTest
     @Mock
     private Context context;
 
+    private APIGatewayProxyRequestEvent.ProxyRequestContext requestContext;
+
     @Before
     public void init()
     {
@@ -77,6 +81,8 @@ public class UpdateHandTest
         player = new Player();
         table = new Table();
         request = new APIGatewayProxyRequestEvent();
+        requestContext = new APIGatewayProxyRequestEvent.ProxyRequestContext();
+        request.setRequestContext(requestContext);
         gson = gsonBuilder.create();
 
         List<AttributeDefinition> attrs =
@@ -183,6 +189,7 @@ public class UpdateHandTest
     public void testHandleRequestFailure4()
     {
         Map<String,String> pathParameters = new HashMap<>();
+        Map<String,String> queryStringParameters = new HashMap<>();
         pathParameters.put("tableId", "0");
         pathParameters.put("seatId", "0");
         table.setId(0L);
@@ -192,6 +199,7 @@ public class UpdateHandTest
         hand.setId(0L);
         request.setHttpMethod("PUT");
         request.setPathParameters(pathParameters);
+        request.setQueryStringParameters(queryStringParameters);
         request.setBody(gson.toJson(hand));
         APIGatewayProxyResponseEvent response =
             updateHand.handleRequest(request, context);
@@ -211,12 +219,15 @@ public class UpdateHandTest
         Map<String,String> queryStringParameters = new HashMap<>();
         headers.put("Accept",
                     "application/json");
+        headers.put("Host",
+                    "blackjack.dev");
         pathParameters.put("tableId", "0");
         pathParameters.put("seatId", "0");
         pathParameters.put("handId", "0");
         request.setHttpMethod("PUT");
         request.setResource("/v0/tables/{tableId}/players/{seatId}/hands/{handId}");
         request.setPath("/v0/tables/0/players/0/hands/0");
+        requestContext.setPath("/dev/v0/tables/0/players/0/hands/0");
         request.setPathParameters(pathParameters);
         request.setQueryStringParameters(queryStringParameters);
         request.setHeaders(headers);
@@ -230,8 +241,11 @@ public class UpdateHandTest
             updateHand.handleRequest(request, context);
         assertEquals("application/json",
                      response.getHeaders().get("Content-Type"));
+        assertNull(response.getHeaders().get("Location"));
         assertEquals(Integer.valueOf(200), response.getStatusCode());
         assertEquals(gson.toJson(hand), response.getBody());
+        Optional<Hand> hand = hands.getById(0L);
+        assertTrue(hand.isPresent());
     }
 
     @Test
@@ -241,11 +255,13 @@ public class UpdateHandTest
         Map<String,String> pathParameters = new HashMap<>();
         Map<String,String> queryStringParameters = new HashMap<>();
         pathParameters.put("tableId", "0");
+        headers.put("Host", "");
         pathParameters.put("seatId", "0");
         pathParameters.put("handId", "0");
         request.setHttpMethod("");
         request.setResource("");
         request.setPath("");
+        requestContext.setPath("");
         request.setPathParameters(pathParameters);
         request.setQueryStringParameters(queryStringParameters);
         request.setHeaders(headers);

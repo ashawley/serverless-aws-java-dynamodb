@@ -53,6 +53,8 @@ public class AddTableTest
     @Mock
     private Context context;
 
+    private APIGatewayProxyRequestEvent.ProxyRequestContext requestContext;
+
     @Before
     public void init()
     {
@@ -60,6 +62,8 @@ public class AddTableTest
         addTable = new AddTable(ddb);
         table = new Table();
         request = new APIGatewayProxyRequestEvent();
+        requestContext = new APIGatewayProxyRequestEvent.ProxyRequestContext();
+        request.setRequestContext(requestContext);
         gson = gsonBuilder.create();
 
         List<AttributeDefinition> attrs =
@@ -118,9 +122,12 @@ public class AddTableTest
         Map<String,String> queryStringParameters = new HashMap<>();
         headers.put("Accept",
                     "application/json");
+        headers.put("Host",
+                    "blackjack.dev");
         request.setHttpMethod("POST");
         request.setResource("/v0/tables");
         request.setPath("/v0/tables");
+        requestContext.setPath("/dev/v0/tables");
         request.setQueryStringParameters(queryStringParameters);
         request.setHeaders(headers);
         table.setId(0L);
@@ -129,7 +136,7 @@ public class AddTableTest
             addTable.handleRequest(request, context);
         assertEquals("application/json",
                      response.getHeaders().get("Content-Type"));
-        assertEquals("https://blackjack.dev/v0/tables/0",
+        assertEquals("https://blackjack.dev/dev/v0/tables/0",
                      response.getHeaders().get("Location"));
         assertEquals(Integer.valueOf(201), response.getStatusCode());
         assertEquals(gson.toJson(table), response.getBody());
@@ -152,8 +159,6 @@ public class AddTableTest
         assertEquals("application/json",
                      response.getHeaders().get("Content-Type"));
         assertEquals(Integer.valueOf(201), response.getStatusCode());
-        assertEquals("https://blackjack.dev/v0/tables/0",
-                     response.getHeaders().get("Location"));
         assertEquals(gson.toJson(table), response.getBody());
     }
 

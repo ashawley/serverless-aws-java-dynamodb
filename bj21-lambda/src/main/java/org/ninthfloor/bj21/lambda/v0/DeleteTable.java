@@ -28,7 +28,7 @@ public class DeleteTable
     implements RequestHandler<APIGatewayProxyRequestEvent,
                               APIGatewayProxyResponseEvent>
 {
-    private AmazonDynamoDB ddb;
+    final private AmazonDynamoDB ddb;
 
     final private GsonBuilder gsonBuilder =
         new GsonBuilder();
