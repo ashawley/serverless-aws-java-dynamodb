@@ -477,7 +477,7 @@ paths:
       - "hand"
       summary: "Get hands of player"
       description: "Returns list of hands"
-      operationId: "findHandsByPlayer"
+      operationId: "findHandsBySeat"
       produces:
       - "application/json"
       parameters:
