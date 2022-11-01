@@ -44,7 +44,7 @@
 
       <plugin>
         <artifactId>maven-enforcer-plugin</artifactId>
-        <version>3.0.0-M4-SNAPSHOT</version>
+        <version>3.1.1-SNAPSHOT</version>
         <executions>
           <execution>
             <id>enforce-maven</id>
@@ -78,7 +78,7 @@
 
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.9.0-SNAPSHOT</version>
+        <version>3.9.1-SNAPSHOT</version>
         <configuration>
           <compilerArgs>
             <arg>-Xlint:all</arg>
@@ -88,12 +88,12 @@
 
       <plugin>
         <artifactId>maven-source-plugin</artifactId>
-        <version>3.2.2-SNAPSHOT</version>
+        <version>3.3.0-SNAPSHOT</version>
       </plugin>
 
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.3.1-SNAPSHOT</version>
+        <version>3.4.2-SNAPSHOT</version>
         <executions>
           <execution>
             <phase>package</phase>
@@ -118,7 +118,7 @@
 
       <plugin>
         <artifactId>maven-jxr-plugin</artifactId>
-        <version>3.2.0-SNAPSHOT</version>
+        <version>3.3.1-SNAPSHOT</version>
         <executions>
           <execution>
             <phase>package</phase>
@@ -136,27 +136,27 @@
 
       <plugin>
         <artifactId>maven-install-plugin</artifactId>
-        <version>3.0.0-SNAPSHOT</version>
+        <version>3.0.2-SNAPSHOT</version>
       </plugin>
 
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>3.2.1-SNAPSHOT</version>
+        <version>3.3.1-SNAPSHOT</version>
       </plugin>
 
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>
-        <version>3.2.1-SNAPSHOT</version>
+        <version>3.3.1-SNAPSHOT</version>
       </plugin>
 
       <plugin>
         <artifactId>maven-clean-plugin</artifactId>
-        <version>3.1.1-SNAPSHOT</version>
+        <version>3.2.1-SNAPSHOT</version>
       </plugin>
 
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
-        <version>3.1.4-SNAPSHOT</version>
+        <version>3.3.1-SNAPSHOT</version>
       </plugin>
 
     </plugins>
